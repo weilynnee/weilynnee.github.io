@@ -1,222 +1,598 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>Wei Lynn</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Edible Alchemy Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap">
+<style>
+html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+/* Layout: a spinning 3D shelf of packs is the hero; the case file under it changes with the pack in front.
+   Everything after (consulting, shop, giving) is quiet type on the same indigo-and-turmeric ground. */
+:root{
+  --bg:#ECEEF7; --surface:#F9FAFE; --ink:#171A45; --muted:#565B88; --line:#CDD1E6;
+  --accent:#F0B41C; --on-accent:#171A45; --berry:#B3154F; --glow:#FFFFFF;
+  --display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101230; --surface:#181B40; --ink:#ECEEFA; --muted:#A4A9D2; --line:#2E3268;
+    --accent:#F5BE2E; --on-accent:#171A45; --berry:#FF7FAE; --glow:#23275A; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101230; --surface:#181B40; --ink:#ECEEFA; --muted:#A4A9D2; --line:#2E3268;
+  --accent:#F5BE2E; --on-accent:#171A45; --berry:#FF7FAE; --glow:#23275A; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1160px;margin-inline:auto;
+  padding-left:max(clamp(16px,4vw,40px),env(safe-area-inset-left,0px));
+  padding-right:max(clamp(16px,4vw,40px),env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--berry);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-0.02em}
+p{margin:0}
+.mono{font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
 
-  <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: #fff;
-      font-family: Helvetica, Arial, sans-serif;
-      overflow-x: hidden;
-    }
+.draft{background:var(--ink);color:var(--bg)}
+.draft .wrap{padding-block:.5rem}
 
-    section {
-      height: 100vh;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 40px;
-    }
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem 1.5rem;padding-block:1.25rem}
+.brand{font-family:var(--display);font-weight:800;font-size:1.15rem;text-decoration:none}
+.brand span{background:var(--accent);color:var(--on-accent);padding:.05em .35em;border-radius:3px;margin-left:.2em}
+.nav{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;font-weight:500}
+.nav a{text-decoration:none;padding-block:.25rem;border-bottom:2px solid transparent}
+.nav a:hover{border-bottom-color:var(--accent)}
 
-    /* ================= HERO ================= */
-    .hero h1 {
-      font-size: 110px;
-      letter-spacing: 4px;
-      position: relative;
-      z-index: 2;
-    }
+main{display:flex;flex-direction:column;gap:clamp(3.5rem,8vw,6.5rem);padding-bottom:4rem}
 
-    .hero img {
-      position: absolute;
-      z-index: 1;
-      object-fit: cover;
-      filter: grayscale(100%) contrast(110%);
-      opacity: 0.9;
-      transition: transform 0.2s ease-out;
-    }
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(1.5rem,4vw,3rem);align-items:center;padding-top:1rem}
+.hero-copy{display:flex;flex-direction:column;gap:1.25rem;min-width:0}
+h1{font-size:clamp(2.5rem,5.4vw,4.5rem);line-height:.98;font-weight:800}
+h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--accent) 62% 92%,transparent 92%)}
+.lede{font-size:1.125rem;color:var(--muted);max-width:34rem}
+.cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
+.btn{display:inline-flex;align-items:center;font:600 1rem var(--body);padding:.7rem 1.15rem;border-radius:999px;border:2px solid var(--ink);background:transparent;color:var(--ink);text-decoration:none;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn:hover{transform:translateY(-1px)}
 
-    /* MAIN IMAGE */
-    .img1 {
-      width: 460px;
-      bottom: 5%;
-      left: 50%;
-    }
+.stage{position:relative;min-width:0;display:flex;flex-direction:column;gap:.75rem}
+.stage-view{position:relative;aspect-ratio:4/3;max-width:100%;border-radius:20px;
+  background:radial-gradient(ellipse at 50% 62%,var(--glow) 0%,transparent 68%)}
+.stage-view canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;cursor:grab;border-radius:20px}
+.stage-view canvas.dragging{cursor:grabbing}
+.fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);padding:1.5rem}
+.stage-bar{display:flex;align-items:center;justify-content:center;gap:1rem}
+.round{width:2.75rem;height:2.75rem;border-radius:50%;border:2px solid var(--ink);background:transparent;color:var(--ink);font-size:1.2rem;cursor:pointer;line-height:1}
+.round:hover{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.now{min-width:11rem;text-align:center}
+.now b{display:block;font-family:var(--display);font-size:1.2rem;letter-spacing:-0.01em}
+.hint{text-align:center;color:var(--muted)}
 
-    /* SMALL TOP */
-    .img2 {
-      width: 180px;
-      top: 12%;
-      right: 12%;
-    }
+/* sections */
+.sec{display:flex;flex-direction:column;gap:1.75rem}
+.sec-head{display:flex;flex-direction:column;gap:.6rem;max-width:44rem}
+.sec-head .mono{color:var(--berry)}
+h2{font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.04;font-weight:700}
+.sec-head p{color:var(--muted);font-size:1.0625rem}
 
-    /* MEDIUM RIGHT */
-    .img3 {
-      width: 260px;
-      bottom: 10%;
-      right: 8%;
-    }
+/* case file */
+.picks{display:flex;flex-wrap:wrap;gap:.5rem}
+.pick{font:500 .9375rem var(--body);padding:.45rem .9rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.pick[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.file{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,.85fr);gap:clamp(1.25rem,3vw,2.5rem);
+  border-top:2px solid var(--ink);padding-top:1.75rem}
+.file > div{min-width:0;display:flex;flex-direction:column;gap:1rem}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.tag{font-family:var(--mono);font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .55rem;border-radius:4px;border:1px solid var(--line);color:var(--muted)}
+.tag.status{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.file h3{font-size:clamp(1.7rem,3vw,2.3rem);line-height:1.05;font-weight:700}
+.label{font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.spec{border:1.5px dashed var(--line);border-radius:6px;padding:.85rem 1rem;font-family:var(--mono);font-size:.8125rem;display:grid;grid-template-columns:auto 1fr;gap:.3rem 1rem;margin:0}
+.spec dt{color:var(--muted)}
+.spec dd{margin:0;font-variant-numeric:tabular-nums}
+.fix{padding-left:1rem;border-left:3px solid var(--line)}
+.fix.psy{border-left-color:var(--accent)}
+.fix p{font-size:1.0625rem}
+.fix.psy p{font-family:var(--display);font-size:1.3rem;line-height:1.25;letter-spacing:-0.01em}
+.fix.logic p{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.poster{aspect-ratio:4/5;max-width:100%;border-radius:10px;padding:1.25rem;display:flex;flex-direction:column;justify-content:space-between;
+  background:var(--p-bg,#C5281C);color:var(--p-fg,#FFE9B8);transform:rotate(-1.2deg)}
+.poster .mono{font-size:.625rem;opacity:.85}
+.poster p{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,2.6vw,2.1rem);line-height:1.02;letter-spacing:-0.02em;text-wrap:balance}
+.cap{color:var(--muted);font-size:.875rem}
 
-    /* ================= STATEMENT ================= */
-    .statement {
-      height: 180vh;
-      align-items: flex-start;
-      padding-top: 40vh;
-      overflow: hidden;
-    }
+/* consulting */
+.services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:2px solid var(--ink)}
+.svc{padding:1.4rem 1.4rem 1.6rem 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:.45rem;min-width:0}
+.svc h3{font-size:1.25rem;font-weight:700;letter-spacing:-0.01em}
+.svc p{color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1rem;counter-reset:s}
+.steps li{counter-increment:s;display:flex;flex-direction:column;gap:.3rem;min-width:0;border-top:3px solid var(--accent);padding-top:.7rem}
+.steps li::before{content:"Step " counter(s);font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.steps b{font-family:var(--display);font-size:1.15rem}
+.steps span{color:var(--muted);font-size:.9375rem}
 
-    .statement h2 {
-      font-size: 40px;
-      text-align: left;
-      line-height: 1.3;
-      max-width: 600px;
-    }
+/* shop + giving */
+.band{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:clamp(1.25rem,3.5vw,2.25rem)}
+.shop{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem 2rem}
+.shop > div{display:flex;flex-direction:column;gap:.5rem;min-width:0;max-width:38rem}
+.shop p{color:var(--muted)}
+.give{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(1.5rem,4vw,3rem);align-items:start}
+.give > div{display:flex;flex-direction:column;gap:1rem;min-width:0}
+.give p{color:var(--muted);font-size:1.0625rem}
+.give .small{font-size:.875rem}
+.calc{display:flex;flex-direction:column;gap:.9rem}
+.calc label{font-weight:600}
+.calc input[type=range]{width:100%;accent-color:var(--berry)}
+.calc output{display:block;font-family:var(--display);font-weight:800;font-size:clamp(2rem,4.5vw,3rem);line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
+.calc .of{color:var(--muted);font-size:.9375rem}
+.log{border-top:1px dashed var(--line);padding-top:.9rem;color:var(--muted);font-size:.9375rem}
 
-    #movingText {
-      will-change: transform;
-    }
+/* contact */
+.contact{display:flex;flex-direction:column;gap:1.25rem;align-items:flex-start}
+.mail{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem}
+.mail code{font-family:var(--mono);font-size:clamp(1.05rem,2.6vw,1.5rem);user-select:all;overflow-wrap:anywhere}
+footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:var(--muted);font-size:.875rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between}
 
-    /* ================= QUOTE ================= */
-    .quote {
-      height: 45vh;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-end;
-      text-align: right;
-      padding-right: 15%;
-    }
-
-    .quote p {
-      font-size: 20px;
-      max-width: 500px;
-    }
-
-    .quote span {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #888;
-    }
-
-    /* ================= BRAND ================= */
-    .brand h1 {
-      font-size: 90px;
-    }
-
-    .brand p {
-      font-size: 30px;
-      margin-top: 10px;
-    }
-
-    /* glow */
-    section::after {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 70%);
-      pointer-events: none;
-    }
-  </style>
+@media (max-width:900px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .file{grid-template-columns:minmax(0,1fr)}
+  .poster{max-width:20rem}
+  .services{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .give{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  .stage-view{aspect-ratio:1/1}
+  .services{grid-template-columns:minmax(0,1fr)}
+  .svc{padding-right:0}
+}
+@media (prefers-reduced-motion:reduce){.btn:hover{transform:none}}
+</style>
 </head>
-
 <body>
 
-<!-- SECTION 1 -->
-<section class="hero">
-  <h1>A TINY FRY</h1>
+<div class="draft"><div class="wrap mono">Draft · names, ventures, figures and the pledge % are placeholders to replace</div></div>
 
-  <img src="https://images.unsplash.com/photo-1520975922203-bc1cfae3f3b3?q=80&w=800" class="img1">
-  <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600" class="img2">
-  <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=600" class="img3">
-</section>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#top">[Your Name]<span>food scientist</span></a>
+  <nav class="nav" aria-label="Sections">
+    <a href="#work">Work</a><a href="#consulting">R&amp;D consulting</a><a href="#shop">Shop</a><a href="#giving">Giving</a><a href="#contact">Contact</a>
+  </nav>
+</div></header>
 
-<!-- SECTION 2 -->
-<section class="statement">
-  <h2 id="movingText">
-    I MAKE THINGS<br>
-    THE WAY I THINK<br>
-    THEY SHOULD BE MADE
-  </h2>
-</section>
+<main id="top">
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-copy">
+        <h1>Food science makes it good. Branding makes it <em>wanted</em>.</h1>
+        <p class="lede">I'm [Your Name], a food scientist who has been starting small food businesses since I was young. Some launched. Some never left the bench. Each one taught me how products get made, and how they get chosen.</p>
+        <div class="cta-row">
+          <a class="btn solid" href="#consulting">Hire me for R&amp;D</a>
+          <a class="btn" href="#work">Open the case files</a>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-view" id="stageView" tabindex="0" role="group" aria-label="3D shelf of products. Use left and right arrow keys to turn it.">
+          <canvas id="shelf"></canvas>
+          <p class="fallback" id="fallback" hidden>3D view is not available in this browser. Use the buttons below to browse the products.</p>
+        </div>
+        <div class="stage-bar">
+          <button class="round" id="prev" type="button" aria-label="Previous product">&#8592;</button>
+          <div class="now" aria-live="polite"><b id="nowName">Chilli Crisp</b><span class="mono" id="nowCount">1 / 6</span></div>
+          <button class="round" id="next" type="button" aria-label="Next product">&#8594;</button>
+        </div>
+        <p class="hint mono" id="hint">Drag to spin the shelf · tap a pack to open its file</p>
+      </div>
+    </section>
+  </div>
 
-<!-- SECTION 3 -->
-<section class="quote">
-  <p>
-    “A brand isn’t what you show — it’s what people feel when you’re gone.”
-  </p>
-  <span>— UNKNOWN</span>
-</section>
+  <div class="wrap">
+    <section class="sec" id="work">
+      <div class="sec-head">
+        <span class="mono">Case files</span>
+        <h2>Every venture, launched or not</h2>
+        <p>Each file shows the product, the sensible fix I could have made, the fix I made instead, and the ad that came out of it. I think perception is part of the recipe, an idea I owe to Rory Sutherland.</p>
+      </div>
+      <div class="picks" id="picks" role="group" aria-label="Choose a venture"></div>
+      <article class="file" aria-live="polite">
+        <div>
+          <div class="tags"><span class="tag status" id="fStatus"></span><span class="tag" id="fKind"></span><span class="tag">Sample entry</span></div>
+          <h3 id="fName"></h3>
+          <p id="fWhat"></p>
+          <div><p class="label">What I learned</p><p id="fLearn"></p></div>
+          <dl class="spec" id="fSpec"></dl>
+        </div>
+        <div>
+          <div class="fix logic"><p class="label">The logical fix</p><p id="fLogic"></p></div>
+          <div class="fix psy"><p class="label">The psycho-logical fix</p><p id="fPsy"></p></div>
+        </div>
+        <div>
+          <div class="poster" id="poster">
+            <span class="mono" id="pTop"></span>
+            <p id="fAd"></p>
+            <span class="mono">Sample ad</span>
+          </div>
+          <p class="cap">Placeholder ad. Swap in the real artwork or video still.</p>
+        </div>
+      </article>
+    </section>
+  </div>
 
-<!-- SECTION 4 -->
-<section class="brand">
-  <h1>NEWMAN</h1>
-  <p>STRENGTH STARTS NOW</p>
-</section>
+  <div class="wrap">
+    <section class="sec" id="consulting">
+      <div class="sec-head">
+        <span class="mono">Service</span>
+        <h2>R&amp;D consultation for food and drink brands</h2>
+        <p>Most brands hire an agency for the story and a factory for the product. I work on the part in between, so the product delivers what the brand promises.</p>
+      </div>
+      <div class="services">
+        <div class="svc"><h3>Formulation</h3><p>New recipes from a brief, or reformulation for less sugar, less salt, a shorter ingredient list or a lower cost.</p></div>
+        <div class="svc"><h3>Shelf life and stability</h3><p>Water activity, pH, packaging and storage trials, so the date on the pack is one you can stand behind.</p></div>
+        <div class="svc"><h3>Sensory testing</h3><p>Triangle tests and consumer panels that show whether people can taste the change, and whether they like it.</p></div>
+        <div class="svc"><h3>Scale-up</h3><p>Taking a kitchen recipe to a pilot batch and on to a co-manufacturer's line while keeping what made it good.</p></div>
+        <div class="svc"><h3>Costing</h3><p>Ingredient and process cost per unit, with options when the margin does not work.</p></div>
+        <div class="svc"><h3>Perceived value</h3><p>Name, format, portion and pack decisions that change how a product is judged before it is tasted.</p></div>
+      </div>
+      <ol class="steps" aria-label="How a project runs">
+        <li><b>Brief</b><span>What you are making, for whom, at what price.</span></li>
+        <li><b>Bench</b><span>Prototype recipes and a written product spec.</span></li>
+        <li><b>Panel</b><span>Sensory tests on the leading versions.</span></li>
+        <li><b>Pilot</b><span>A scaled batch and shelf-life trial.</span></li>
+        <li><b>Handover</b><span>Spec, process and costing for your manufacturer.</span></li>
+      </ol>
+      <div><a class="btn solid" href="#contact">Tell me what you're making</a></div>
+    </section>
+  </div>
 
-<!-- SECTION 5 -->
-<section class="brand">
-  <h1>MYLO'S</h1>
-  <p>BUILT WITH HEART</p>
-</section>
+  <div class="wrap">
+    <section class="band shop" id="shop">
+      <div>
+        <span class="mono">Shop</span>
+        <h2>Opening later</h2>
+        <p>Products from the shelf will be sold here when they are ready. Until then, the case files above are the catalogue.</p>
+      </div>
+      <a class="btn" href="#contact">Ask about a product</a>
+    </section>
+  </div>
 
-<!-- SECTION 6 -->
-<section class="brand">
-  <h1>JUMPING FOX</h1>
-  <p>MOVE FAST. STAY SHARP.</p>
-</section>
+  <div class="wrap">
+    <section class="sec" id="giving">
+      <div class="give">
+        <div>
+          <span class="mono" style="color:var(--berry)">Giving</span>
+          <h2>Part of every invoice feeds someone</h2>
+          <p>World Central Kitchen is a nonprofit founded by chef José Andrés. Its teams cook fresh meals for communities hit by humanitarian, climate and community crises.</p>
+          <p>I give <b style="color:var(--ink)"><span class="pct">5</span>%</b> of what this business earns to World Central Kitchen, from consulting fees and, later, from product sales.</p>
+          <div><a class="btn" href="https://wck.org" target="_blank" rel="noopener">Give to World Central Kitchen directly</a></div>
+          <p class="small">I support World Central Kitchen independently. This site is not affiliated with or endorsed by them.</p>
+        </div>
+        <div class="band calc">
+          <label for="fee">If your project fee is <span id="feeVal">$4,000</span></label>
+          <input type="range" id="fee" min="500" max="20000" step="500" value="4000">
+          <div>
+            <output id="gift" for="fee">$200</output>
+            <span class="of">goes to World Central Kitchen at <span class="pct">5</span>%</span>
+          </div>
+          <div class="log"><b style="color:var(--ink)">Giving log.</b> No donations logged yet. Each donation will be listed here with its date and amount once it is made.</div>
+        </div>
+      </div>
+    </section>
+  </div>
 
-<!-- ================= PARALLAX ================= -->
+  <div class="wrap">
+    <section class="sec contact" id="contact">
+      <div class="sec-head">
+        <span class="mono">Contact</span>
+        <h2>Have a product that should taste better, or sell better?</h2>
+        <p>Send a few lines about what you are making and where it is stuck.</p>
+      </div>
+      <div class="mail">
+        <code id="email">hello@your-domain.com</code>
+        <button class="btn" id="copy" type="button">Copy email</button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer><div class="wrap"><span>[Your Name] · Food science, R&amp;D and brand work</span><span>Draft portfolio</span></div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
+(function(){
+  "use strict";
+  var PLEDGE = 5; // placeholder: percent of earnings given to World Central Kitchen
 
-function updateParallax() {
-  const section = document.querySelector(".statement");
-  const text = document.getElementById("movingText");
+  // Sample ventures. Replace each entry with a real one.
+  var P = [
+    {name:"Chilli Crisp", lines:["CHILLI","CRISP"], shape:"jar", bg:"#C5281C", fg:"#FFE9B8", lid:"#1E1C22",
+     status:"Launched", kind:"Condiment",
+     what:"Crunchy chilli oil made in small batches for a weekend market stall.",
+     learn:"Scarcity only works when it is true, so I kept the batches small.",
+     logic:"Price it below the supermarket jar.",
+     psy:"Hand-number every lid. A batch number says someone made this on purpose.",
+     ad:"Batch 041. There will never be another Batch 041.",
+     spec:[["Water activity","0.45"],["Storage","Ambient"],["Shelf life","12 months"]]},
+    {name:"Oat Kefir", lines:["OAT","KEFIR"], shape:"bottle", bg:"#F2EADB", fg:"#1F4D3A", lid:"#1F4D3A",
+     status:"Pilot batch", kind:"Fermented drink",
+     what:"A fermented oat drink for people who avoid dairy.",
+     learn:"Fermentation varies from batch to batch. I learned to write the spec before the recipe.",
+     logic:"List every probiotic strain on the front.",
+     psy:"Sell it in a 150 ml bottle. A small serving reads as a strong one.",
+     ad:"Too strong for a big bottle.",
+     spec:[["pH","4.2"],["Storage","Chilled, 4 °C"],["Shelf life","21 days"]]},
+    {name:"Yuzu Soda", lines:["YUZU","SODA"], shape:"can", bg:"#F4D03A", fg:"#1B3A8A", lid:"#C9CCD6",
+     status:"Shelved", kind:"Sparkling drink",
+     what:"A low-sugar sparkling yuzu drink. It never got past the pilot run.",
+     learn:"The minimum can run was far bigger than my demand. Now I cost the supply chain first.",
+     logic:"Print the sugar figure in large type.",
+     psy:"Call it a dry soda and sell it beside beer, where not sweet is a virtue.",
+     ad:"The soft drink for people who stopped ordering soft drinks.",
+     spec:[["pH","3.2"],["Sugar","4.5 °Brix"],["Shelf life","9 months"]]},
+    {name:"Kaya Bites", lines:["KAYA","BITES"], shape:"box", bg:"#2F7D4F", fg:"#FFF3C9", lid:"#256440",
+     status:"Pilot batch", kind:"Filled shortbread",
+     what:"Shortbread filled with pandan kaya, built to survive the post.",
+     learn:"Moisture moved from the filling into the biscuit. Matching water activity fixed the texture.",
+     logic:"Put more filling in each piece.",
+     psy:"Pack nine in a three-by-three tray, so the box gets shared and gifted.",
+     ad:"Nine pieces. Decide who you like.",
+     spec:[["Water activity","0.32"],["Storage","Ambient"],["Shelf life","4 months"]]},
+    {name:"Miso Caramel", lines:["MISO","CARAMEL"], shape:"tub", bg:"#6B3A1E", fg:"#F7C873", lid:"#F7C873",
+     status:"Shelved", kind:"Spread",
+     what:"A salted caramel spread made with white miso.",
+     learn:"It crystallised in week six. The glucose ratio mattered more than the cooking time.",
+     logic:"Explain what miso is on the label.",
+     psy:"Explain nothing. Give it a familiar name and let the first spoonful do the work.",
+     ad:"Salted caramel grew up.",
+     spec:[["Water activity","0.60"],["Solids","76 °Brix"],["Shelf life","6 months"]]},
+    {name:"Cold Brew", lines:["COLD","BREW"], shape:"pouch", bg:"#E58A5B", fg:"#2A1436", lid:"#2A1436",
+     status:"Launched", kind:"Coffee concentrate",
+     what:"Cold brew concentrate in a pouch, sold by subscription.",
+     learn:"Low-acid chilled drinks carry real safety risk. I learned process validation properly.",
+     logic:"Give a discount for subscribing.",
+     psy:"Write the brew date on each pouch by hand. People keep what feels made for them.",
+     ad:"Brewed Tuesday. For you, specifically.",
+     spec:[["pH","5.1"],["Storage","Chilled, 4 °C"],["Shelf life","30 days"]]}
+  ];
+  var N = P.length, TAU = Math.PI*2, STEP = TAU/N, idx = 0;
+  function $(id){return document.getElementById(id)}
+  function mod(n,m){return ((n%m)+m)%m}
 
-  const img1 = document.querySelector(".img1");
-  const img2 = document.querySelector(".img2");
-  const img3 = document.querySelector(".img3");
-
-  const rect = section.getBoundingClientRect();
-  const windowHeight = window.innerHeight;
-
-  const progress = (windowHeight - rect.top) / windowHeight;
-  const sectionScroll = clamp(-rect.top, 0, section.offsetHeight);
-  const scrollRange = Math.max(section.offsetHeight - windowHeight, 1);
-  const normalizedScroll = clamp(sectionScroll / scrollRange, 0, 1);
-  const easedScroll = 1 - Math.pow(1 - normalizedScroll, 2);
-  const maxTextTravel = Math.max(section.offsetHeight - text.offsetHeight - 80, 0);
-  const textTravel = easedScroll * maxTextTravel;
-
-  /* TEXT */
-  text.style.transform = `translateY(${textTravel}px)`;
-
-  /* IMAGES */
-  img1.style.transform = `translate(-50%, ${progress * 40}px)`;
-  img2.style.transform = `translateY(${progress * -60}px)`;
-  img3.style.transform = `translateY(${progress * -30}px)`;
-
-}
-
-let ticking = false;
-window.addEventListener("scroll", function() {
-  if (!ticking) {
-    window.requestAnimationFrame(function() {
-      updateParallax();
-      ticking = false;
+  // ---------- case file ----------
+  var picks = $("picks");
+  P.forEach(function(p,i){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "pick"; b.id = "pick"+i; b.textContent = p.name;
+    b.addEventListener("click", function(){ select(i) });
+    picks.appendChild(b);
+  });
+  function show(i){
+    var p = P[i];
+    $("fStatus").textContent = p.status; $("fKind").textContent = p.kind;
+    $("fName").textContent = p.name; $("fWhat").textContent = p.what; $("fLearn").textContent = p.learn;
+    $("fLogic").textContent = p.logic; $("fPsy").textContent = p.psy; $("fAd").textContent = p.ad;
+    $("pTop").textContent = p.name;
+    var po = $("poster"); po.style.setProperty("--p-bg", p.bg); po.style.setProperty("--p-fg", p.fg);
+    var dl = $("fSpec"); dl.textContent = "";
+    p.spec.forEach(function(row){
+      var dt = document.createElement("dt"), dd = document.createElement("dd");
+      dt.textContent = row[0]; dd.textContent = row[1]; dl.appendChild(dt); dl.appendChild(dd);
     });
-    ticking = true;
+    $("nowName").textContent = p.name; $("nowCount").textContent = (i+1)+" / "+N;
+    for (var k=0;k<N;k++) $("pick"+k).setAttribute("aria-pressed", k===i ? "true":"false");
   }
-}, { passive: true });
+  var spinTo = null; // set by the 3D shelf when it is running
+  function select(i){ idx = mod(i,N); show(idx); if (spinTo) spinTo(idx); }
+  show(0);
+  $("prev").addEventListener("click", function(){ select(idx-1) });
+  $("next").addEventListener("click", function(){ select(idx+1) });
+  $("stageView").addEventListener("keydown", function(e){
+    if (e.key==="ArrowLeft"){ select(idx-1); e.preventDefault() }
+    if (e.key==="ArrowRight"){ select(idx+1); e.preventDefault() }
+  });
 
-window.addEventListener("resize", updateParallax);
-updateParallax();
+  // ---------- pledge calculator ----------
+  var fee = $("fee");
+  function money(n){ return "$"+Math.round(n).toLocaleString("en-US") }
+  function pledge(){
+    var v = Number(fee.value);
+    $("feeVal").textContent = money(v);
+    $("gift").textContent = money(v*PLEDGE/100);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".pct"), function(el){ el.textContent = PLEDGE });
+  fee.addEventListener("input", pledge); pledge();
+
+  // ---------- copy email ----------
+  $("copy").addEventListener("click", function(){
+    var btn = this, text = $("email").textContent;
+    function done(){ btn.textContent = "Copied"; setTimeout(function(){ btn.textContent = "Copy email" }, 1600) }
+    function pickText(){
+      var r = document.createRange(); r.selectNodeContents($("email"));
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = "Selected. Press copy";
+    }
+    try { navigator.clipboard.writeText(text).then(done, pickText) } catch(e){ pickText() }
+  });
+
+  // ---------- 3D shelf ----------
+  function noShelf(){ $("shelf").hidden = true; $("fallback").hidden = false; $("hint").hidden = true; }
+  if (!window.THREE){ noShelf(); return; }
+  var T = window.THREE;
+  var ready = false;
+  function start(){ if (ready) return; ready = true; try { build() } catch(e){ noShelf() } }
+  try {
+    Promise.all([document.fonts.load('800 80px "Bricolage Grotesque"'), document.fonts.load('500 24px "DM Mono"')]).then(start, start);
+  } catch(e){}
+  setTimeout(start, 1500);
+
+  function build(){
+    var canvas = $("shelf"), view = $("stageView");
+    var renderer = new T.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+    var scene = new T.Scene();
+    var camera = new T.PerspectiveCamera(32, 4/3, 0.1, 100);
+    camera.position.set(0, 2.6, 10.5);
+    scene.add(new T.HemisphereLight(0xffffff, 0x8a90bb, 0.95));
+    var sun = new T.DirectionalLight(0xffffff, 0.75); sun.position.set(3,6,5); scene.add(sun);
+
+    var R = 3, ring = new T.Group(); scene.add(ring);
+
+    // turntable, coloured from the page tokens
+    var topMat = new T.MeshBasicMaterial(), sideMat = new T.MeshBasicMaterial();
+    var table = new T.Mesh(new T.CylinderGeometry(R+1.15, R+1.15, 0.1, 96), [sideMat, topMat, sideMat]);
+    table.position.y = -0.05; scene.add(table);
+    function tint(){
+      var cs = getComputedStyle(document.documentElement);
+      topMat.color.set(cs.getPropertyValue("--surface").trim() || "#F9FAFE");
+      sideMat.color.set(cs.getPropertyValue("--line").trim() || "#CDD1E6");
+    }
+    tint();
+    try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", tint) } catch(e){}
+    new MutationObserver(tint).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+
+    function label(p, w, h, wrap){
+      var c = document.createElement("canvas"); c.width = w; c.height = h;
+      var g = c.getContext("2d");
+      g.fillStyle = p.bg; g.fillRect(0,0,w,h);
+      g.fillStyle = p.fg; g.fillRect(0,h*0.07,w,h*0.022); g.fillRect(0,h*0.908,w,h*0.022);
+      g.textAlign = "center"; g.textBaseline = "middle";
+      var fs = Math.round(Math.min(h*0.21, w*0.26)), maxW = wrap ? w*0.29 : w*0.84;
+      g.font = '800 '+fs+'px "Bricolage Grotesque","Trebuchet MS",sans-serif';
+      p.lines.forEach(function(t,i){ g.fillText(t, w/2, h*0.36 + i*fs*0.95, maxW) });
+      g.font = '500 '+Math.round(fs*0.3)+'px "DM Mono",monospace';
+      g.fillText("SAMPLE · BATCH 001", w/2, h*0.8, maxW);
+      var tex = new T.CanvasTexture(c);
+      if (wrap){ tex.wrapS = T.RepeatWrapping; tex.offset.x = 0.5; }
+      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      return tex;
+    }
+    function std(color, metal){ return new T.MeshStandardMaterial({color:color, roughness:0.5, metalness:metal||0.05}) }
+    function cyl(rt, rb, h, y, mat){
+      var m = new T.Mesh(new T.CylinderGeometry(rt, rb, h, 56), mat); m.position.y = y; return m;
+    }
+    var blob = (function(){
+      var c = document.createElement("canvas"); c.width = c.height = 128;
+      var g = c.getContext("2d"), gr = g.createRadialGradient(64,64,4,64,64,62);
+      gr.addColorStop(0,"rgba(10,12,40,0.5)"); gr.addColorStop(1,"rgba(10,12,40,0)");
+      g.fillStyle = gr; g.fillRect(0,0,128,128); return new T.CanvasTexture(c);
+    })();
+
+    function pack(p){
+      var g = new T.Group(), plain = std(p.bg), lid = std(p.lid, 0.25);
+      var wrapMat = function(){ return new T.MeshStandardMaterial({map:label(p,1024,384,true), roughness:0.5, metalness:0.05}) };
+      if (p.shape==="jar"){
+        g.add(cyl(0.55,0.55,1.1,0.55,[wrapMat(),plain,plain])); g.add(cyl(0.58,0.58,0.22,1.2,lid));
+      } else if (p.shape==="can"){
+        g.add(cyl(0.42,0.42,1.5,0.75,[wrapMat(),lid,lid])); g.add(cyl(0.38,0.42,0.06,1.53,lid));
+      } else if (p.shape==="bottle"){
+        g.add(cyl(0.4,0.4,1.15,0.575,[wrapMat(),plain,plain])); g.add(cyl(0.16,0.4,0.35,1.325,plain));
+        g.add(cyl(0.16,0.16,0.3,1.65,plain)); g.add(cyl(0.19,0.19,0.16,1.86,lid));
+      } else if (p.shape==="tub"){
+        g.add(cyl(0.64,0.5,0.85,0.425,[wrapMat(),plain,plain])); g.add(cyl(0.67,0.67,0.1,0.9,lid));
+      } else if (p.shape==="pouch"){
+        var body = cyl(0.52,0.56,1.3,0.65,[wrapMat(),plain,plain]); body.scale.z = 0.4; g.add(body);
+        var seal = new T.Mesh(new T.BoxGeometry(1.04,0.16,0.05), lid); seal.position.y = 1.36; g.add(seal);
+      } else {
+        var side = std(p.lid), front = new T.MeshStandardMaterial({map:label(p,512,716,false), roughness:0.6});
+        var box = new T.Mesh(new T.BoxGeometry(1,1.4,0.5), [side,side,side,side,front,plain]); box.position.y = 0.7; g.add(box);
+      }
+      var sh = new T.Mesh(new T.PlaneGeometry(2,2), new T.MeshBasicMaterial({map:blob, transparent:true, depthWrite:false}));
+      sh.rotation.x = -Math.PI/2; sh.position.y = 0.006; g.add(sh);
+      return g;
+    }
+
+    var items = [], hit = [];
+    P.forEach(function(p,i){
+      var g = pack(p), a = i*STEP;
+      g.position.set(Math.sin(a)*R, 0, Math.cos(a)*R);
+      g.userData.sway = 0;
+      g.traverse(function(o){ if (o.isMesh){ o.userData.i = i; hit.push(o) } });
+      ring.add(g); items.push(g);
+    });
+
+    var rot = 0, target = 0, vel = 0, dragging = false, locked = false, moved = 0, lastX = 0, px = 0, py = 0;
+    var reduce = false;
+    try { reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches } catch(e){}
+
+    spinTo = function(i){
+      var t = -i*STEP; t += Math.round((rot - t)/TAU)*TAU; target = t; locked = true;
+    };
+    spinTo(idx);
+
+    canvas.addEventListener("pointerdown", function(e){
+      dragging = true; locked = false; moved = 0; vel = 0; lastX = e.clientX;
+      canvas.classList.add("dragging");
+      try { canvas.setPointerCapture(e.pointerId) } catch(err){}
+    });
+    canvas.addEventListener("pointermove", function(e){
+      var r = canvas.getBoundingClientRect();
+      px = ((e.clientX - r.left)/r.width)*2 - 1; py = ((e.clientY - r.top)/r.height)*2 - 1;
+      if (!dragging) return;
+      var dx = e.clientX - lastX; lastX = e.clientX; moved += Math.abs(dx);
+      vel = dx*0.006; rot += vel; target = rot;
+    });
+    function release(e, cancelled){
+      if (!dragging) return;
+      dragging = false; canvas.classList.remove("dragging");
+      if (!cancelled && moved < 6){
+        var r = canvas.getBoundingClientRect();
+        var v = new T.Vector2(((e.clientX-r.left)/r.width)*2-1, -((e.clientY-r.top)/r.height)*2+1);
+        var ray = new T.Raycaster(); ray.setFromCamera(v, camera);
+        var h = ray.intersectObjects(hit, false);
+        if (h.length){ select(h[0].object.userData.i); return; }
+      }
+      var snap = Math.round((rot + vel*10)/STEP)*STEP;
+      idx = mod(Math.round(-snap/STEP), N); show(idx); target = snap; locked = true;
+    }
+    canvas.addEventListener("pointerup", function(e){ release(e,false) });
+    canvas.addEventListener("pointercancel", function(e){ release(e,true) });
+    canvas.addEventListener("pointerleave", function(){ px = 0; py = 0 });
+
+    function size(){
+      var w = view.clientWidth, h = view.clientHeight; if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w/h; camera.position.z = camera.aspect < 1.15 ? 13.5 : 10.5; camera.updateProjectionMatrix();
+    }
+    size();
+    if (window.ResizeObserver) new ResizeObserver(size).observe(view); else window.addEventListener("resize", size);
+
+    var onscreen = true;
+    if (window.IntersectionObserver) new IntersectionObserver(function(en){ onscreen = en[0].isIntersecting }).observe(view);
+
+    var last = performance.now();
+    function frame(now){
+      requestAnimationFrame(frame);
+      var dt = Math.min(0.05, (now-last)/1000); last = now;
+      if (!onscreen || document.hidden) return;
+      if (!dragging) rot += (target-rot)*Math.min(1, dt*7);
+      if (locked && Math.abs(target-rot) < 0.01) locked = false;
+      if (dragging){
+        var near = mod(Math.round(-rot/STEP), N);
+        if (near !== idx){ idx = near; show(idx) }
+      }
+      ring.rotation.y = rot;
+      for (var i=0;i<N;i++){
+        var it = items[i], f = Math.pow(Math.max(0, Math.cos(i*STEP+rot)), 4);
+        it.scale.setScalar(0.85 + 0.5*f);
+        var want = (i===idx && !reduce && !dragging) ? Math.sin(now/1000*0.9)*0.45 : 0;
+        it.userData.sway += (want - it.userData.sway)*Math.min(1, dt*5);
+        it.rotation.y = i*STEP + it.userData.sway;
+      }
+      var k = reduce ? 0 : 1;
+      camera.position.x += (px*0.9*k - camera.position.x)*0.06;
+      camera.position.y += (2.6 - py*0.5*k - camera.position.y)*0.06;
+      camera.lookAt(0, 0.75, 0);
+      renderer.render(scene, camera);
+    }
+    requestAnimationFrame(frame);
+  }
+})();
 </script>
-
 </body>
 </html>
