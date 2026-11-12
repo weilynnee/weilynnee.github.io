@@ -121,10 +121,35 @@ h2{font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.04;font-weight:700}
 .cases{display:flex;flex-direction:column;gap:1rem}
 .cases h3{font-size:1.5rem;font-weight:700}
 .case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:1rem}
-.case{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.2rem;display:flex;flex-direction:column;gap:.6rem;min-width:0}
-.case h4{font-family:var(--display);font-size:1.35rem;line-height:1.1;letter-spacing:-0.01em;margin:0;text-wrap:balance}
-.case p{color:var(--muted);font-size:.9375rem}
-.case .tag{align-self:flex-start;color:var(--berry);border-color:var(--berry)}
+.case{display:flex;flex-direction:column;gap:.6rem;align-items:flex-start;text-align:left;min-width:0;padding:1.2rem;font:inherit;color:var(--ink);cursor:zoom-in;
+  background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:14px;transition:transform .2s ease,border-color .2s ease}
+.case:hover{transform:translateY(-3px) scale(1.02);border-color:var(--ink);border-top-color:var(--accent)}
+.case.in{animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(.94) rotate(-1.2deg)}60%{transform:scale(1.04) rotate(.6deg)}100%{transform:none}}
+.case .tag{color:var(--berry);border-color:var(--berry)}
+.case-name{font-family:var(--display);font-weight:700;font-size:1.35rem;line-height:1.1;letter-spacing:-0.01em;text-wrap:balance}
+.case-tease{color:var(--muted);font-size:.9375rem}
+.case-open{font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;margin-top:auto;padding-top:.4rem}
+dialog.dlg{border:0;padding:0;background:var(--surface);color:var(--ink);border-radius:18px;width:min(62rem,calc(100% - 32px));max-height:calc(100% - 48px);overflow:auto;border-top:6px solid var(--accent)}
+dialog.dlg::backdrop{background:rgba(16,22,40,.62)}
+.dlg-in{padding:clamp(1.1rem,3vw,2rem);display:flex;flex-direction:column;gap:1.5rem}
+.dlg-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+.dlg-top > div{display:flex;flex-direction:column;gap:.6rem;align-items:flex-start;min-width:0}
+.dlg-top h3{font-size:clamp(1.9rem,5vw,3rem);line-height:1.02;font-weight:800}
+.dlg-top .tag{color:var(--berry);border-color:var(--berry)}
+.dlg-top .round{flex:none;font-size:1.4rem}
+.dlg-photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:.75rem}
+.dlg-photos img,.slot{width:100%;aspect-ratio:4/3;border-radius:10px;object-fit:cover;display:block}
+.slot{border:1.5px dashed var(--line);display:grid;place-items:center;color:var(--muted);font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;background:var(--bg)}
+.dlg-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:clamp(1.25rem,3vw,2.5rem)}
+.dlg-cols dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.4rem 1rem;align-content:start;border-top:2px solid var(--ink);padding-top:.9rem}
+.dlg-cols dt{font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:.25rem}
+.dlg-cols dd{margin:0;font-weight:600}
+.dlg-text{display:flex;flex-direction:column;gap:1.1rem;border-top:2px solid var(--ink);padding-top:.9rem;min-width:0}
+.dlg-text p{font-size:1.0625rem;max-width:38rem}
+.todo{font-weight:400;font-style:italic;color:var(--muted)}
+@media (max-width:700px){.dlg-cols{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.case.in{animation:none}.case,.case:hover{transition:none;transform:none}}
 /* shop + giving */
 .band{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:clamp(1.25rem,3.5vw,2.25rem)}
 .shop{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem 2rem}
@@ -144,7 +169,7 @@ h2{font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.04;font-weight:700}
 /* contact */
 .contact{display:flex;flex-direction:column;gap:1.25rem;align-items:flex-start}
 .mail{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem}
-.mail code{font-family:var(--mono);font-size:clamp(1.05rem,2.6vw,1.5rem);user-select:all;overflow-wrap:anywhere}
+.addr{font-family:var(--mono);font-size:clamp(1.05rem,2.6vw,1.5rem);overflow-wrap:anywhere;text-decoration-color:var(--accent);text-underline-offset:.25em}
 footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:var(--muted);font-size:.875rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between}
 
 @media (max-width:900px){
@@ -256,12 +281,13 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:
       </ol>
       <div class="cases">
         <h3>Brands and products I have worked on</h3>
+        <p class="cap">Tap a card to zoom in for photos and the full story.</p>
         <div class="case-grid">
-          <div class="case"><span class="tag">Gelato shop launch</span><h4>Mylo's</h4><p>The brief, my part in the launch and the result will be added here.</p></div>
-          <div class="case"><span class="tag">Client project</span><h4>Kee Corner</h4><p>The brief, my work and the result will be added here.</p></div>
-          <div class="case"><span class="tag">Product development</span><h4>Vegan cakes and desserts</h4><p>The brief, my work and the result will be added here.</p></div>
-          <div class="case"><span class="tag">Product development</span><h4>Soft serve premix</h4><p>The brief, my work and the result will be added here.</p></div>
-          <div class="case"><span class="tag">Product development</span><h4>Vegan gelato</h4><p>The brief, my work and the result will be added here.</p></div>
+          <button class="case" type="button" id="case0" data-case="0"><span class="tag">Gelato shop launch</span><span class="case-name">Mylo's</span><span class="case-tease">Launching a gelato shop.</span><span class="case-open">Tap to open</span></button>
+          <button class="case" type="button" id="case1" data-case="1"><span class="tag">Client project</span><span class="case-name">Kee Corner</span><span class="case-tease">Details to add.</span><span class="case-open">Tap to open</span></button>
+          <button class="case" type="button" id="case2" data-case="2"><span class="tag">Product development</span><span class="case-name">Vegan cakes and desserts</span><span class="case-tease">Details to add.</span><span class="case-open">Tap to open</span></button>
+          <button class="case" type="button" id="case3" data-case="3"><span class="tag">Product development</span><span class="case-name">Soft serve premix</span><span class="case-tease">Details to add.</span><span class="case-open">Tap to open</span></button>
+          <button class="case" type="button" id="case4" data-case="4"><span class="tag">Product development</span><span class="case-name">Vegan gelato</span><span class="case-tease">Details to add.</span><span class="case-open">Tap to open</span></button>
         </div>
       </div>
       <div><a class="btn solid" href="#contact">Tell me what you're making</a></div>
@@ -307,16 +333,31 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:
     <section class="sec contact" id="contact">
       <div class="sec-head">
         <span class="mono">Contact</span>
-        <h2>Have a product that should taste better, or sell better?</h2>
-        <p>Send a few lines about what you are making and where it is stuck.</p>
+        <h2>Why not a chat? It's free anyway.</h2>
+        <p>Tell me what you are making and where it is stuck. Email or call, whichever is easier.</p>
       </div>
       <div class="mail">
-        <code id="email">hello@your-domain.com</code>
-        <button class="btn" id="copy" type="button">Copy email</button>
+        <a class="addr" id="email" href="mailto:weilynnee@gmail.com">weilynnee@gmail.com</a>
+        <button class="btn copy" id="copyEmail" type="button" data-copy="email" data-label="Copy email">Copy email</button>
+      </div>
+      <div class="mail">
+        <a class="addr" id="phone" href="tel:+6594655197">+65 9465 5197</a>
+        <button class="btn copy" id="copyPhone" type="button" data-copy="phone" data-label="Copy number">Copy number</button>
       </div>
     </section>
   </div>
 </main>
+
+<dialog class="dlg" id="caseDlg" aria-labelledby="dlgName">
+  <div class="dlg-in">
+    <div class="dlg-top">
+      <div><span class="tag" id="dlgTag"></span><h3 id="dlgName"></h3></div>
+      <button class="round" id="dlgClose" type="button" aria-label="Close">&times;</button>
+    </div>
+    <div class="dlg-photos" id="dlgPhotos"></div>
+    <div class="dlg-cols"><dl id="dlgFacts"></dl><div class="dlg-text" id="dlgText"></div></div>
+  </div>
+</dialog>
 
 <footer><div class="wrap"><span>Lynn · Food science, R&amp;D and brand work</span><span>Draft portfolio</span></div></footer>
 
@@ -414,6 +455,78 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:
     if (e.key==="ArrowRight"){ select(idx+1); e.preventDefault() }
   });
 
+  // ---------- consulting case cards ----------
+  // Fill these in. null shows "To add". photos: image paths, e.g. "images/mylos-1.jpg".
+  var CASES = [
+    {tag:"Gelato shop launch", name:"Mylo's", facts:[["Brand","Mylo's"],["Shop","Gelato shop"],["Project","Launch R&D"]], photos:[], brief:null, did:null, result:null},
+    {tag:"Client project", name:"Kee Corner", facts:[["Brand","Kee Corner"],["Shop",null],["Project",null]], photos:[], brief:null, did:null, result:null},
+    {tag:"Product development", name:"Vegan cakes and desserts", facts:[["Brand",null],["Product","Vegan cakes and desserts"],["Project",null]], photos:[], brief:null, did:null, result:null},
+    {tag:"Product development", name:"Soft serve premix", facts:[["Brand",null],["Product","Soft serve premix"],["Project",null]], photos:[], brief:null, did:null, result:null},
+    {tag:"Product development", name:"Vegan gelato", facts:[["Brand",null],["Product","Vegan gelato"],["Project",null]], photos:[], brief:null, did:null, result:null}
+  ];
+  var dlg = $("caseDlg"), fromCard = null, closing = false;
+  var calm = false;
+  try { calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches } catch(e){}
+  function val(el, v){
+    if (v){ el.textContent = v } else { var t = document.createElement("span"); t.className = "todo"; t.textContent = "To add"; el.appendChild(t) }
+  }
+  function fillCase(c){
+    $("dlgTag").textContent = c.tag; $("dlgName").textContent = c.name;
+    var ph = $("dlgPhotos"); ph.textContent = "";
+    if (c.photos.length){
+      c.photos.forEach(function(src,i){ var im = document.createElement("img"); im.src = src; im.alt = c.name+" photo "+(i+1); im.loading = "lazy"; ph.appendChild(im) });
+    } else {
+      for (var i=1;i<=3;i++){ var d = document.createElement("div"); d.className = "slot"; d.textContent = "Photo "+i; ph.appendChild(d) }
+    }
+    var dl = $("dlgFacts"); dl.textContent = "";
+    c.facts.forEach(function(r){ var dt = document.createElement("dt"), dd = document.createElement("dd"); dt.textContent = r[0]; val(dd, r[1]); dl.appendChild(dt); dl.appendChild(dd) });
+    var tx = $("dlgText"); tx.textContent = "";
+    [["The brief", c.brief],["What I did", c.did],["The result", c.result]].forEach(function(r){
+      var w = document.createElement("div"), l = document.createElement("p"), p = document.createElement("p");
+      l.className = "label"; l.textContent = r[0]; val(p, r[1]); w.appendChild(l); w.appendChild(p); tx.appendChild(w);
+    });
+  }
+  function zoom(card, back){
+    if (calm || !dlg.animate || !card) return null;
+    var a = card.getBoundingClientRect(), b = dlg.getBoundingClientRect();
+    if (!b.width || !b.height) return null;
+    var small = {transform:"translate("+(a.left-b.left)+"px,"+(a.top-b.top)+"px) scale("+(a.width/b.width)+","+(a.height/b.height)+")", transformOrigin:"top left", opacity:0.3};
+    var big = {transform:"none", transformOrigin:"top left", opacity:1};
+    return dlg.animate(back ? [big, small] : [small, big], {duration: back ? 260 : 400, easing:"cubic-bezier(.2,.8,.2,1)"});
+  }
+  function openCase(card){
+    fillCase(CASES[Number(card.getAttribute("data-case"))]);
+    fromCard = card; closing = false;
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+    document.body.style.overflow = "hidden"; dlg.scrollTop = 0;
+    zoom(card, false);
+    $("dlgClose").focus();
+  }
+  function closeCase(){
+    if (closing) return; closing = true;
+    function end(){
+      if (dlg.close) dlg.close(); else dlg.removeAttribute("open");
+      document.body.style.overflow = ""; closing = false;
+      if (fromCard) fromCard.focus();
+    }
+    var an = zoom(fromCard, true);
+    if (an) an.onfinish = end; else end();
+  }
+  var caseEls = Array.prototype.slice.call(document.querySelectorAll(".case"));
+  caseEls.forEach(function(el){ el.addEventListener("click", function(){ openCase(el) }) });
+  $("dlgClose").addEventListener("click", closeCase);
+  dlg.addEventListener("cancel", function(e){ e.preventDefault(); closeCase() });
+  dlg.addEventListener("click", function(e){ if (e.target === dlg) closeCase() });
+  if (window.IntersectionObserver && caseEls.length && !calm){
+    var seen = new IntersectionObserver(function(en){
+      if (en[0].isIntersecting){
+        seen.disconnect();
+        caseEls.forEach(function(el,i){ setTimeout(function(){ el.classList.add("in") }, i*140) });
+      }
+    }, {threshold:0.3});
+    seen.observe(document.querySelector(".case-grid"));
+  }
+
   // ---------- pledge calculator ----------
   var fee = $("fee");
   function money(n){ return "$"+Math.round(n).toLocaleString("en-US") }
@@ -425,16 +538,18 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:
   Array.prototype.forEach.call(document.querySelectorAll(".pct"), function(el){ el.textContent = PLEDGE });
   fee.addEventListener("input", pledge); pledge();
 
-  // ---------- copy email ----------
-  $("copy").addEventListener("click", function(){
-    var btn = this, text = $("email").textContent;
-    function done(){ btn.textContent = "Copied"; setTimeout(function(){ btn.textContent = "Copy email" }, 1600) }
-    function pickText(){
-      var r = document.createRange(); r.selectNodeContents($("email"));
-      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-      btn.textContent = "Selected. Press copy";
-    }
-    try { navigator.clipboard.writeText(text).then(done, pickText) } catch(e){ pickText() }
+  // ---------- copy contact details ----------
+  Array.prototype.forEach.call(document.querySelectorAll(".copy"), function(btn){
+    btn.addEventListener("click", function(){
+      var src = $(btn.getAttribute("data-copy")), label = btn.getAttribute("data-label");
+      function done(){ btn.textContent = "Copied"; setTimeout(function(){ btn.textContent = label }, 1600) }
+      function pickText(){
+        var r = document.createRange(); r.selectNodeContents(src);
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        btn.textContent = "Selected. Press copy"; setTimeout(function(){ btn.textContent = label }, 2500);
+      }
+      try { navigator.clipboard.writeText(src.textContent).then(done, pickText) } catch(e){ pickText() }
+    });
   });
 
   // ---------- 3D shelf ----------
