@@ -9,23 +9,23 @@
 <style>
 html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 /* Layout: a spinning 3D shelf of packs is the hero; the case file under it changes with the pack in front.
-   Everything after (consulting, shop, giving) is quiet type on the same indigo-and-turmeric ground. */
+   Everything after (consulting, shop, giving) is quiet type on the same red, cream and navy ground. */
 :root{
-  --bg:#ECEEF7; --surface:#F9FAFE; --ink:#171A45; --muted:#565B88; --line:#CDD1E6;
-  --accent:#F0B41C; --on-accent:#171A45; --berry:#B3154F; --glow:#FFFFFF;
+  --bg:#F0E1CE; --surface:#F8EEE0; --ink:#1A2841; --muted:#5B6274; --line:#D9C6AE;
+  --accent:#B11722; --on-accent:#F0E1CE; --berry:#B11722; --glow:#FBF4EA; --mark:#F2B5A7;
   --display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
   --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#101230; --surface:#181B40; --ink:#ECEEFA; --muted:#A4A9D2; --line:#2E3268;
-    --accent:#F5BE2E; --on-accent:#171A45; --berry:#FF7FAE; --glow:#23275A; color-scheme:dark;
+    --bg:#1A2841; --surface:#22324F; --ink:#F0E1CE; --muted:#B9B4AE; --line:#34456A;
+    --accent:#D6303B; --on-accent:#FFF6EA; --berry:#F29398; --glow:#263A5E; --mark:#8E1F28; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#101230; --surface:#181B40; --ink:#ECEEFA; --muted:#A4A9D2; --line:#2E3268;
-  --accent:#F5BE2E; --on-accent:#171A45; --berry:#FF7FAE; --glow:#23275A; color-scheme:dark;
+  --bg:#1A2841; --surface:#22324F; --ink:#F0E1CE; --muted:#B9B4AE; --line:#34456A;
+    --accent:#D6303B; --on-accent:#FFF6EA; --berry:#F29398; --glow:#263A5E; --mark:#8E1F28; color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -54,7 +54,7 @@ main{display:flex;flex-direction:column;gap:clamp(3.5rem,8vw,6.5rem);padding-bot
 .hero{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(1.5rem,4vw,3rem);align-items:center;padding-top:1rem}
 .hero-copy{display:flex;flex-direction:column;gap:1.25rem;min-width:0}
 h1{font-size:clamp(2.5rem,5.4vw,4.5rem);line-height:.98;font-weight:800}
-h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--accent) 62% 92%,transparent 92%)}
+h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--mark) 62% 92%,transparent 92%)}
 .lede{font-size:1.125rem;color:var(--muted);max-width:34rem}
 .cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
 .btn{display:inline-flex;align-items:center;font:600 1rem var(--body);padding:.7rem 1.15rem;border-radius:999px;border:2px solid var(--ink);background:transparent;color:var(--ink);text-decoration:none;cursor:pointer}
@@ -118,6 +118,13 @@ h2{font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.04;font-weight:700}
 .steps b{font-family:var(--display);font-size:1.15rem}
 .steps span{color:var(--muted);font-size:.9375rem}
 
+.cases{display:flex;flex-direction:column;gap:1rem}
+.cases h3{font-size:1.5rem;font-weight:700}
+.case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:1rem}
+.case{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.2rem;display:flex;flex-direction:column;gap:.6rem;min-width:0}
+.case h4{font-family:var(--display);font-size:1.35rem;line-height:1.1;letter-spacing:-0.01em;margin:0;text-wrap:balance}
+.case p{color:var(--muted);font-size:.9375rem}
+.case .tag{align-self:flex-start;color:var(--berry);border-color:var(--berry)}
 /* shop + giving */
 .band{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:clamp(1.25rem,3.5vw,2.25rem)}
 .shop{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem 2rem}
@@ -158,10 +165,10 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:
 </head>
 <body>
 
-<div class="draft"><div class="wrap mono">Draft · names, ventures, figures and the pledge % are placeholders to replace</div></div>
+<div class="draft"><div class="wrap mono">Draft · ventures, figures, case study details and the pledge % are placeholders to replace</div></div>
 
 <header class="top"><div class="wrap">
-  <a class="brand" href="#top">[Your Name]<span>food scientist</span></a>
+  <a class="brand" href="#top">Lynn<span>food scientist</span></a>
   <nav class="nav" aria-label="Sections">
     <a href="#work">Work</a><a href="#consulting">R&amp;D consulting</a><a href="#shop">Shop</a><a href="#giving">Giving</a><a href="#contact">Contact</a>
   </nav>
@@ -172,7 +179,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:
     <section class="hero">
       <div class="hero-copy">
         <h1>Food science makes it good. Branding makes it <em>wanted</em>.</h1>
-        <p class="lede">I'm [Your Name], a food scientist who has been starting small food businesses since I was young. Some launched. Some never left the bench. Each one taught me how products get made, and how they get chosen.</p>
+        <p class="lede">I'm Lynn, a food scientist who has been starting small food businesses since I was young. Some launched. Some never left the bench. Each one taught me how products get made, and how they get chosen.</p>
         <div class="cta-row">
           <a class="btn solid" href="#consulting">Hire me for R&amp;D</a>
           <a class="btn" href="#work">Open the case files</a>
@@ -247,6 +254,16 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:
         <li><b>Pilot</b><span>A scaled batch and shelf-life trial.</span></li>
         <li><b>Handover</b><span>Spec, process and costing for your manufacturer.</span></li>
       </ol>
+      <div class="cases">
+        <h3>Brands and products I have worked on</h3>
+        <div class="case-grid">
+          <div class="case"><span class="tag">Gelato shop launch</span><h4>Mylo's</h4><p>The brief, my part in the launch and the result will be added here.</p></div>
+          <div class="case"><span class="tag">Client project</span><h4>Kee Corner</h4><p>The brief, my work and the result will be added here.</p></div>
+          <div class="case"><span class="tag">Product development</span><h4>Vegan cakes and desserts</h4><p>The brief, my work and the result will be added here.</p></div>
+          <div class="case"><span class="tag">Product development</span><h4>Soft serve premix</h4><p>The brief, my work and the result will be added here.</p></div>
+          <div class="case"><span class="tag">Product development</span><h4>Vegan gelato</h4><p>The brief, my work and the result will be added here.</p></div>
+        </div>
+      </div>
       <div><a class="btn solid" href="#contact">Tell me what you're making</a></div>
     </section>
   </div>
@@ -301,7 +318,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:
   </div>
 </main>
 
-<footer><div class="wrap"><span>[Your Name] · Food science, R&amp;D and brand work</span><span>Draft portfolio</span></div></footer>
+<footer><div class="wrap"><span>Lynn · Food science, R&amp;D and brand work</span><span>Draft portfolio</span></div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -449,12 +466,12 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:
     table.position.y = -0.05; scene.add(table);
     function tint(){
       var cs = getComputedStyle(document.documentElement);
-      topMat.color.set(cs.getPropertyValue("--surface").trim() || "#F9FAFE");
-      sideMat.color.set(cs.getPropertyValue("--line").trim() || "#CDD1E6");
+      topMat.color.set(cs.getPropertyValue("--surface").trim() || "#F8EEE0");
+      sideMat.color.set(cs.getPropertyValue("--line").trim() || "#D9C6AE");
     }
     tint();
     try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", tint) } catch(e){}
-    new MutationObserver(tint).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+    new MutationObserver(tint).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme","style"]});
 
     function label(p, w, h, wrap){
       var c = document.createElement("canvas"); c.width = w; c.height = h;
@@ -479,7 +496,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:
     var blob = (function(){
       var c = document.createElement("canvas"); c.width = c.height = 128;
       var g = c.getContext("2d"), gr = g.createRadialGradient(64,64,4,64,64,62);
-      gr.addColorStop(0,"rgba(10,12,40,0.5)"); gr.addColorStop(1,"rgba(10,12,40,0)");
+      gr.addColorStop(0,"rgba(16,22,40,0.5)"); gr.addColorStop(1,"rgba(16,22,40,0)");
       g.fillStyle = gr; g.fillRect(0,0,128,128); return new T.CanvasTexture(c);
     })();
 
