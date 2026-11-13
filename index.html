@@ -9,23 +9,23 @@
 <style>
 html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 /* Layout: a spinning 3D shelf of packs is the hero; the case file under it changes with the pack in front.
-   Everything after (consulting, shop, giving) is quiet type on the same red, cream and navy ground. */
+   Everything after (consulting, shop, giving) is quiet type on the same midnight navy, powder blue and sunflower ground. */
 :root{
-  --bg:#F0E1CE; --surface:#F8EEE0; --ink:#1A2841; --muted:#5B6274; --line:#D9C6AE;
-  --accent:#B11722; --on-accent:#F0E1CE; --berry:#B11722; --glow:#FBF4EA; --mark:#F2B5A7;
+  --bg:#C5DCF0; --surface:#E4EFF9; --ink:#0F1B3D; --muted:#46557A; --line:#9DBEDD;
+  --accent:#FFC428; --on-accent:#0F1B3D; --berry:#1D3F94; --glow:#F1F7FC; --mark:#FFC428;
   --display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
   --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1A2841; --surface:#22324F; --ink:#F0E1CE; --muted:#B9B4AE; --line:#34456A;
-    --accent:#D6303B; --on-accent:#FFF6EA; --berry:#F29398; --glow:#263A5E; --mark:#8E1F28; color-scheme:dark;
+    --bg:#0F1B3D; --surface:#182650; --ink:#DCEBF8; --muted:#9FB4D3; --line:#2B3D6E;
+    --accent:#FFC428; --on-accent:#0F1B3D; --berry:#FFC428; --glow:#1E2F60; --mark:#8A6A10; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#1A2841; --surface:#22324F; --ink:#F0E1CE; --muted:#B9B4AE; --line:#34456A;
-    --accent:#D6303B; --on-accent:#FFF6EA; --berry:#F29398; --glow:#263A5E; --mark:#8E1F28; color-scheme:dark;
+  --bg:#0F1B3D; --surface:#182650; --ink:#DCEBF8; --muted:#9FB4D3; --line:#2B3D6E;
+    --accent:#FFC428; --on-accent:#0F1B3D; --berry:#FFC428; --glow:#1E2F60; --mark:#8A6A10; color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -84,7 +84,8 @@ h2{font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.04;font-weight:700}
 /* case file */
 .picks{display:flex;flex-wrap:wrap;gap:.5rem}
 .pick{font:500 .9375rem var(--body);padding:.45rem .9rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
-.pick[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.pick[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.sec-head .mono::before,.camp-head .mono::before,.shop .mono::before,.give .mono::before{content:"";display:inline-block;width:.6em;height:.6em;border-radius:2px;background:var(--accent);margin-right:.55em}
 .file{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,.85fr);gap:clamp(1.25rem,3vw,2.5rem);
   border-top:2px solid var(--ink);padding-top:1.75rem}
 .file > div{min-width:0;display:flex;flex-direction:column;gap:1rem}
@@ -194,7 +195,7 @@ dialog.dlg::backdrop{background:rgba(16,22,40,.62)}
 @media (max-width:800px){.contact-grid{grid-template-columns:minmax(0,1fr)}}
 .mail{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem}
 .addr{font-family:var(--mono);font-size:clamp(1.05rem,2.6vw,1.5rem);overflow-wrap:anywhere;text-decoration-color:var(--accent);text-underline-offset:.25em}
-footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:var(--muted);font-size:.875rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between}
+footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);color:var(--muted);font-size:.875rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between}
 
 @media (max-width:900px){
   .hero{grid-template-columns:minmax(0,1fr)}
@@ -704,8 +705,8 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:1px solid var(--line);color:
     catcher.rotation.x = -Math.PI/2; catcher.position.y = 0.003; catcher.receiveShadow = true; scene.add(catcher);
     function tint(){
       var cs = getComputedStyle(document.documentElement);
-      topMat.color.set(cs.getPropertyValue("--surface").trim() || "#F8EEE0");
-      sideMat.color.set(cs.getPropertyValue("--line").trim() || "#D9C6AE");
+      topMat.color.set(cs.getPropertyValue("--surface").trim() || "#E4EFF9");
+      sideMat.color.set(cs.getPropertyValue("--line").trim() || "#9DBEDD");
     }
     tint();
     try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", tint) } catch(e){}
