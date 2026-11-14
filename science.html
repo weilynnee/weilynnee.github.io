@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Edible Alchemy Science</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap">
+<style>
+/* Layout: the pan fire that started it, then a wheel of topic cards; the card in front opens its notebook page underneath. */
+:root{
+  --bg:#C5DCF0; --surface:#E4EFF9; --ink:#0F1B3D; --muted:#46557A; --line:#9DBEDD;
+  --accent:#FFC428; --on-accent:#0F1B3D; --berry:#1D3F94; --mark:#FFC428; --night:#0F1B3D;
+  --display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1B3D; --surface:#182650; --ink:#DCEBF8; --muted:#9FB4D3; --line:#2B3D6E;
+    --accent:#FFC428; --on-accent:#0F1B3D; --berry:#FFC428; --mark:#8A6A10; --night:#070D22; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1B3D; --surface:#182650; --ink:#DCEBF8; --muted:#9FB4D3; --line:#2B3D6E;
+  --accent:#FFC428; --on-accent:#0F1B3D; --berry:#FFC428; --mark:#8A6A10; --night:#070D22; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{width:100%;max-width:1160px;margin-inline:auto;
+  padding-left:max(clamp(16px,4vw,40px),env(safe-area-inset-left,0px));
+  padding-right:max(clamp(16px,4vw,40px),env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--berry);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-0.02em}
+p{margin:0}
+.mono{font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.eyebrow{color:var(--berry)}
+.eyebrow::before{content:"";display:inline-block;width:.6em;height:.6em;border-radius:2px;background:var(--accent);margin-right:.55em}
+
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem 1.5rem;padding-block:1.25rem}
+.brand{font-family:var(--display);font-weight:800;font-size:1.15rem;text-decoration:none}
+.brand span{background:var(--accent);color:var(--on-accent);padding:.05em .35em;border-radius:3px;margin-left:.2em}
+.nav{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;font-weight:500}
+.nav a{text-decoration:none;padding-block:.25rem;border-bottom:2px solid transparent}
+.nav a:hover,.nav a[aria-current]{border-bottom-color:var(--accent)}
+
+main{display:flex;flex-direction:column;gap:clamp(1.5rem,4vw,2.5rem);padding-bottom:4rem}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(1.5rem,4vw,3rem);align-items:center;padding-top:.5rem}
+.hero-copy{display:flex;flex-direction:column;gap:1rem;min-width:0}
+h1{font-size:clamp(2.2rem,5.6vw,4.4rem);line-height:.98;font-weight:800}
+h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--mark) 62% 92%,transparent 92%)}
+.lede{font-size:1.0625rem;color:var(--muted);max-width:40rem}
+
+/* the flame: small and still; it only leans a little when hovered */
+.flame{margin:0;width:clamp(4.5rem,11vw,8.5rem);justify-self:end;align-self:center;position:relative}
+.flame::before{content:"";position:absolute;inset:-18%;border-radius:50%;background:radial-gradient(circle at 50% 62%,var(--mark) 0%,transparent 62%);opacity:.3}
+.flame img{position:relative;display:block;width:100%;height:auto;transform-origin:50% 95%;transition:transform .7s ease}
+.flame:hover img{transform:scale(1.07) rotate(-3deg)}
+
+/* wheel */
+.wheel{display:flex;flex-direction:column;gap:.75rem}
+.stage{--cw:clamp(150px,20vw,210px);--ch:214px;position:relative;height:280px;perspective:1500px;overflow:hidden;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.stage.dragging{cursor:grabbing}
+.ring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.stage.dragging .ring{transition:none}
+.card{position:absolute;left:calc(var(--cw) / -2);top:calc(var(--ch) / -2);width:var(--cw);height:var(--ch);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  display:flex;flex-direction:column;gap:.5rem;text-align:left;padding:.9rem .9rem 1rem;font:inherit;color:var(--ink);cursor:pointer;
+  background:var(--surface);border:1.5px solid var(--line);border-top:6px solid var(--line);border-radius:14px}
+.card[aria-pressed="true"]{border-color:var(--ink);border-top-color:var(--accent)}
+.card .mono{color:var(--berry);font-size:.6875rem}
+.card b{font-family:var(--display);font-weight:700;font-size:1.25rem;line-height:1.08;letter-spacing:-0.01em;text-wrap:balance}
+.card i{font-family:var(--mono);font-style:normal;font-size:.75rem;color:var(--muted);margin-top:auto;overflow-wrap:anywhere}
+.bar{display:flex;align-items:center;justify-content:center;gap:1rem}
+.round{width:2.75rem;height:2.75rem;border-radius:50%;border:2px solid var(--ink);background:transparent;color:var(--ink);font-size:1.2rem;cursor:pointer;line-height:1}
+.round:hover{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.now{min-width:12rem;text-align:center}
+.now b{display:block;font-family:var(--display);font-size:1.15rem}
+.hint{text-align:center;color:var(--muted)}
+
+/* topic page */
+.topic{display:flex;flex-direction:column;gap:1.5rem;background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--accent);border-radius:18px;padding:clamp(1.1rem,3.5vw,2.25rem)}
+.topic-head{display:flex;flex-direction:column;gap:.6rem;max-width:46rem}
+h2{font-size:clamp(1.7rem,3.6vw,2.7rem);line-height:1.04;font-weight:700}
+.topic-head p{color:var(--muted);font-size:1.0625rem}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.25rem,3.5vw,2.5rem);align-items:start}
+.cols > div{display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.prose{display:flex;flex-direction:column;gap:.9rem;max-width:44rem}
+.blocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr));gap:0 clamp(1.25rem,3vw,2.5rem);border-top:2px solid var(--ink)}
+.block{display:flex;flex-direction:column;gap:.45rem;padding-block:1.1rem;border-bottom:1px solid var(--line);min-width:0}
+.topic p{color:var(--muted)}
+.topic p b,.topic li b{color:var(--ink)}
+.topic h3{font-size:1.15rem;font-weight:700;letter-spacing:-0.01em}
+.eq{font-family:var(--mono);font-size:1rem;color:var(--ink);background:var(--bg);border:1.5px dashed var(--line);border-radius:6px;padding:.5rem .8rem;align-self:flex-start;max-width:100%;overflow-wrap:anywhere}
+.tool{display:flex;flex-direction:column;gap:.8rem;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem}
+.tool label{font-weight:600;color:var(--ink)}
+.tool input[type=range]{width:100%;accent-color:var(--berry)}
+.tool select{font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:8px;padding:.5rem .6rem;max-width:100%}
+.big{display:block;font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,4.6vw,3rem);line-height:1.02;letter-spacing:-0.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.small{font-size:.875rem}
+.row{display:flex;flex-wrap:wrap;gap:.75rem 1rem;align-items:center}
+.btn{font:600 .9375rem var(--body);padding:.5rem 1rem;border-radius:999px;border:2px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.btn:hover{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#walk{width:100%;aspect-ratio:16/10;display:block;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+.meter{height:14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);width:0}
+.stages{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.stages li{display:grid;grid-template-columns:7.5rem minmax(0,1fr);gap:.2rem 1rem;padding:.55rem .6rem;border-top:1px solid var(--line);color:var(--muted);border-radius:6px}
+.stages li span{font-family:var(--mono);font-size:.8125rem;color:var(--ink);font-variant-numeric:tabular-nums;padding-top:.1rem}
+.stages li.on{background:var(--accent);color:var(--on-accent);border-top-color:transparent}
+.stages li.on span,.stages li.on b{color:var(--on-accent)}
+.egg{width:100%;max-width:15rem;align-self:center}
+.swatch{width:2.2rem;height:2.2rem;border-radius:50%;border:1.5px solid var(--line);flex:none}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:34rem;font-size:.9375rem}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+th{font-family:var(--mono);font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;vertical-align:bottom}
+td{color:var(--ink)}
+.mine{font-style:italic;font-size:.9375rem;border-left:3px solid var(--accent);padding-left:.7rem}
+
+footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);color:var(--muted);font-size:.875rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between}
+@media (max-width:820px){.cols{grid-template-columns:minmax(0,1fr)} .stages li{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.flame{align-self:start}}
+@media (prefers-reduced-motion:reduce){.ring,.flame img{transition:none} .flame:hover img{transform:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./">Edible Alchemy<span>by Lynn</span></a>
+  <nav class="nav" aria-label="Pages">
+    <a href="./">Portfolio</a><a href="shop.html">Shop</a><a href="science.html" aria-current="page">Food science</a>
+  </nav>
+</div></header>
+
+<main>
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="mono eyebrow">Food science notebook</span>
+        <h1>The notebook I'd rescue from a <em>fire</em>.</h1>
+        <p class="lede">I have almost burnt the kitchen down more than once. These are the notes that came out of it, and I add to them as I test things.</p>
+      </div>
+      <figure class="flame">
+        <img src="flame-mark.webp" width="310" height="420" alt="Flames from a pan fire in my kitchen">
+      </figure>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section class="wheel" aria-label="Topics">
+      <div class="stage" id="stage"><div class="ring" id="ring"></div></div>
+      <div class="bar">
+        <button class="round" id="prev" type="button" aria-label="Previous topic">&#8592;</button>
+        <div class="now" aria-live="polite"><b id="nowName">Where the heat goes</b><span class="mono" id="nowCount">1 / 13</span></div>
+        <button class="round" id="next" type="button" aria-label="Next topic">&#8594;</button>
+      </div>
+      <p class="hint mono">Drag to spin · click a card to open it below</p>
+    </section>
+  </div>
+
+  <div class="wrap" id="pages">
+
+    <section class="topic" id="topic-heat" data-cat="Heat" data-card="Where the heat goes" data-eq="Q = m × cp × ΔT">
+      <div class="topic-head">
+        <span class="mono eyebrow">Heat</span>
+        <h2>Heat is never lost, only moved</h2>
+        <p>Drop a 23 °C egg into boiling water. The heat the water gives up is exactly the heat the egg takes in. That is conservation of energy, and it lets you work out where the temperature ends up.</p>
+      </div>
+      <div class="cols">
+        <div>
+          <span class="eq">Q = m × cp × ΔT</span>
+          <p><b>Q</b> is heat energy in joules, <b>m</b> is mass, <b>cp</b> is specific heat (the energy needed to warm one gram by one degree) and <b>ΔT</b> is the change in temperature. Water has a cp of 4.18 J/g°C. An egg is about 3.3.</p>
+          <p>Set the heat lost by the water equal to the heat gained by the egg:</p>
+          <span class="eq">mw·cw·(100 − Tf) = me·ce·(Tf − 23)</span>
+          <p>Then solve for the final temperature both settle at:</p>
+          <span class="eq">Tf = (mw·cw·Tw + me·ce·Te) ÷ (mw·cw + me·ce)</span>
+          <p><b>Assumption:</b> all the energy goes from the water into the egg. None escapes to the air or the pot, and the stove is off.</p>
+        </div>
+        <div class="tool">
+          <label for="hWater">Boiling water: <span id="hWaterVal">1000 g</span></label>
+          <input type="range" id="hWater" min="250" max="2000" step="250" value="1000">
+          <label for="hEggs">Eggs (55 g each): <span id="hEggsVal">1</span></label>
+          <input type="range" id="hEggs" min="1" max="6" step="1" value="1">
+          <label for="hStart">Egg starting temperature: <span id="hStartVal">23 °C</span></label>
+          <input type="range" id="hStart" min="5" max="25" step="1" value="23">
+          <div><span class="big" id="hOut">96.8 °C</span><span class="small">final temperature of water and egg together</span></div>
+          <p class="small" id="hNote"></p>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Why water is the cook's favourite</h3><p>Water's specific heat is unusually high, so a pot of it stores a lot of energy and hands it over steadily. Oil holds about half as much per gram, which is why it heats up twice as fast on the same flame.</p></div>
+        <div class="block"><h3>Why crowding the pan fails</h3><p>Every piece of cold food draws heat out of the pan or pot. Add too much at once and the temperature falls below where searing or boiling happens, so the food stews until the burner catches up.</p></div>
+        <div class="block"><h3>The hidden heat in steam</h3><p>Turning one gram of boiling water into steam takes about 2,260 joules without raising the temperature at all. That is over five times the energy needed to bring it from fridge-cold to boiling. Steam gives all of it back when it condenses on your hand, so it burns worse than boiling water.</p></div>
+        <div class="block"><h3>Why wet food sticks at 100 °C</h3><p>As long as water is boiling off a surface, the heat goes into evaporation and the temperature cannot climb past 100 °C. Nothing fries or browns until that water is gone.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-egg" data-cat="Proteins" data-card="The perfect egg" data-eq="a temperature, not a time" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Proteins</span>
+        <h2>The perfect egg is a temperature, not a time</h2>
+        <p>An egg is a mix of proteins, and each one unfolds and sets at its own temperature. Every degree between 60 and 70 gives a different egg, so the perfect one is whichever temperature you like best.</p>
+      </div>
+      <div class="cols">
+        <div class="tool">
+          <svg class="egg" viewBox="0 0 300 220" role="img" aria-label="Cross-section of an egg at the chosen temperature">
+            <ellipse cx="150" cy="112" rx="132" ry="92" fill="#FFFFFF" id="eggWhite" stroke="#9DBEDD" stroke-width="2"/>
+            <circle cx="150" cy="112" r="46" fill="#F59A1B" id="eggYolk"/>
+            <ellipse cx="134" cy="96" rx="13" ry="8" fill="#FFFFFF" id="eggShine" opacity=".7"/>
+          </svg>
+          <label for="eggT">Temperature inside the egg: <span id="eggTVal">63 °C</span></label>
+          <input type="range" id="eggT" min="5" max="70" step="1" value="63">
+          <div><span class="big" id="eggName">Jelly white, runny yolk</span><span class="small" id="eggDesc"></span></div>
+        </div>
+        <div>
+          <ul class="stages" id="eggStages">
+            <li data-max="39"><span>5 to 39 °C</span><div><b>Raw.</b> Proteins are still folded. The white is clear and runny.</div></li>
+            <li data-max="54"><span>40 to 54 °C</span><div><b>Warm but raw.</b> It looks unchanged.</div></li>
+            <li data-max="59"><span>55 to 59 °C</span><div><b>Still liquid.</b> The first proteins begin to loosen.</div></li>
+            <li data-max="62"><span>60 to 62 °C</span><div><b>White turns milky.</b> The first white protein sets and the white starts to gel.</div></li>
+            <li data-max="64"><span>63 to 64 °C</span><div><b>Jelly white, runny yolk.</b> The white is a delicate jelly and the yolk still flows.</div></li>
+            <li data-max="67"><span>65 to 67 °C</span><div><b>Custard yolk.</b> Yolk proteins start to set and the yolk thickens to a jam.</div></li>
+            <li data-max="70"><span>68 to 70 °C</span><div><b>Fudgy yolk.</b> The yolk holds its shape. The white is tender but set.</div></li>
+          </ul>
+          <p class="small">These are for an egg held long enough to reach that temperature all the way through, as in a water bath.</p>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Which protein does what</h3><p>In the white, ovotransferrin sets near 62 °C and gives the first soft gel. Ovalbumin, more than half of the white, holds out until about 80 °C, and that is what makes a white firm and bouncy. Yolk proteins set between 65 and 70 °C.</p></div>
+        <div class="block"><h3>Why boiling is a blunt tool</h3><p>Boiling water is 100 °C, far hotter than any part of the egg needs to be. The outside overshoots while heat is still travelling to the centre, so timing becomes a race. Cooking at the target temperature removes the race.</p></div>
+        <div class="block"><h3>How long heat takes to get in</h3><p>An egg is about 4.4 cm across. By the diffusion estimate, heat needs roughly a quarter of an hour to reach the centre. That is why a soft-boiled egg has a set white and a runny middle: the centre has not caught up yet.</p></div>
+        <div class="block"><h3>The green ring</h3><p>Cook an egg too long and sulphur from the white meets iron in the yolk, forming a grey-green layer where they touch. Cooling the egg quickly in cold water stops it.</p></div>
+        <div class="block"><h3>Why older eggs peel better</h3><p>An egg loses carbon dioxide through its shell as it ages, so the white becomes more alkaline and sticks less to the inner membrane.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-steak" data-cat="Diffusion" data-card="The random-walk steak" data-eq="L = √(4 × D × t)" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Diffusion</span>
+        <h2>A steak cooks one random step at a time</h2>
+        <p>Heat has no direction. It stumbles from the pan into the meat one random step at a time, so it covers distance slowly, and more slowly the further it goes.</p>
+      </div>
+      <div class="cols">
+        <div>
+          <canvas id="walk" aria-label="Animation of heat spreading upward into a steak from the pan by random steps"></canvas>
+          <div class="row"><button class="btn" id="walkReset" type="button">Start again</button><span class="small mono" id="walkStat">Step 0</span></div>
+        </div>
+        <div>
+          <span class="eq">L = √(4 × D × t)</span>
+          <p><b>L</b> is how far the heat has reached, <b>t</b> is time, and <b>D</b> is how fast heat spreads in the food, about 1.4 × 10⁻⁷ m²/s for meat. Distance grows with the square root of time, so a steak twice as thick takes four times as long.</p>
+          <div class="tool">
+            <label for="thick">Steak thickness: <span id="thickVal">2.5 cm</span></label>
+            <input type="range" id="thick" min="1" max="6" step="0.5" value="2.5">
+            <div><span class="big" id="thickOut">4.7 min</span><span class="small">for heat to reach the centre from both sides</span></div>
+          </div>
+          <p class="small">This is the diffusion time only, a rough guide and not a cooking time.</p>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Why a random walk is slow</h3><p>After a hundred random steps you are, on average, only ten steps from where you started. After ten thousand, only a hundred. Distance grows with the square root of the number of steps, and that is where the square root in the equation comes from.</p></div>
+        <div class="block"><h3>The grey band</h3><p>A hot pan cooks the outside long before the centre warms, leaving a band of overcooked meat under the crust. Cooking gently first and searing at the end, or using a water bath, keeps the whole steak close to one temperature.</p></div>
+        <div class="block"><h3>Why resting works</h3><p>When the steak leaves the pan the outside is much hotter than the middle. Heat keeps walking inward for several minutes, so the centre continues to rise and the temperature evens out.</p></div>
+        <div class="block"><h3>What the temperatures do</h3><p>Myosin sets around 50 °C and firms the meat. Actin sets from about 66 °C and squeezes out juice. Medium rare sits between the two, which is why it is firm but still juicy.</p></div>
+        <div class="block"><h3>Salt walks too, far more slowly</h3><p>The same law covers salt in a brine, but salt moves roughly a hundred times more slowly than heat. By the same estimate it needs about seven hours to travel one centimetre, which is why brining is an overnight job and searing takes minutes.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-acid" data-cat="Proteins" data-card="Cooking without fire" data-eq="pH = −log [H⁺]" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Proteins</span>
+        <h2>Acid cooks without heat</h2>
+        <p>Proteins hold their shape partly through electric charges along the chain. Acid changes those charges, so the protein unfolds and bonds to its neighbours, the same result heat gives.</p>
+      </div>
+      <div class="cols">
+        <div>
+          <span class="eq">pH = −log [H⁺]</span>
+          <p>pH counts hydrogen ions. Each step down the scale means ten times more of them, so lime juice near pH 2 is about a hundred thousand times more acidic than water at pH 7.</p>
+          <p>Every protein has a pH where its charges cancel out. With nothing left to push the molecules apart, they clump. For the casein in milk that point is about pH 4.6.</p>
+        </div>
+        <div>
+          <ul class="stages">
+            <li><span>Ceviche</span><div>Citrus juice firms raw fish and turns it opaque with no heat at all.</div></li>
+            <li><span>Paneer, ricotta</span><div>Add acid to hot milk and the casein clumps into curds as the pH drops towards 4.6.</div></li>
+            <li><span>Yoghurt</span><div>Bacteria make the acid slowly, so the proteins link into a smooth gel instead of curds.</div></li>
+            <li><span>Poached egg</span><div>A little vinegar in the water helps the white set faster and hold together.</div></li>
+            <li><span>Meringue</span><div>A pinch of cream of tartar steadies the egg-white foam so it is harder to overwhip.</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Why marinades stay shallow</h3><p>Acid travels into meat by the same slow random walk as salt, so a marinade only reaches a few millimetres. Leave it too long and the surface turns chalky and mushy while the middle is untouched.</p></div>
+        <div class="block"><h3>Proteins that ignore acid</h3><p>Casein clumps in acid, but whey proteins stay dissolved until they are heated. That is why whey can be made into a clear, sharp-tasting protein drink, and why ricotta needs both heat and acid.</p></div>
+        <div class="block"><h3>Acid sets jam</h3><p>Pectin chains carry charges that keep them apart. Enough acid, around pH 3, cancels those charges, and with enough sugar to tie up the water the chains link into a gel.</p></div>
+        <div class="block"><h3>Acid changes colour</h3><p>Red cabbage is a pH indicator: red in acid, purple when neutral, blue-green in alkali. Green vegetables do the reverse of what you want, turning olive when acid knocks the magnesium out of chlorophyll.</p></div>
+        <div class="block"><h3>The other end of the scale</h3><p>Alkali reshapes proteins too. It gives ramen noodles their spring, pretzels their dark crust, and turns an egg into a century egg with no cooking.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-clear" data-cat="Proteins" data-card="The clear protein shake" data-eq="scattering ∝ d⁶" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Proteins</span>
+        <h2>Why a protein shake can be clear</h2>
+        <p>Milk is white because it is full of particles big enough to scatter light. Take those out, then keep the remaining protein molecules from clumping, and the drink turns transparent. This is the idea behind clear protein drinks, including my own Newman.</p>
+      </div>
+      <div class="cols">
+        <div class="tool">
+          <svg class="egg" viewBox="0 0 200 240" role="img" aria-label="A glass of protein drink that turns from clear to cloudy as the pH changes" style="color:var(--ink)">
+            <rect x="72" y="104" width="56" height="7" fill="currentColor" opacity=".75"/>
+            <rect x="72" y="130" width="56" height="7" fill="currentColor" opacity=".75"/>
+            <rect x="72" y="156" width="56" height="7" fill="currentColor" opacity=".75"/>
+            <path d="M54.5 70 L145.5 70 L137 213 Q136.5 222 127 222 L73 222 Q63.5 222 63 213 Z" fill="#D7EA7A" fill-opacity=".5"/>
+            <path d="M54.5 70 L145.5 70 L137 213 Q136.5 222 127 222 L73 222 Q63.5 222 63 213 Z" fill="#F3F5E6" id="clearHaze" opacity="0"/>
+            <path d="M50 30 L150 30 L139 216 Q138 227 127 227 L73 227 Q62 227 61 216 Z" fill="none" stroke="#9DBEDD" stroke-width="3"/>
+          </svg>
+          <label for="clearPH">Acidity of the drink: <span id="clearPHVal">pH 3.2</span></label>
+          <input type="range" id="clearPH" min="2.5" max="7" step="0.1" value="3.2">
+          <div><span class="big" id="clearName">Clear</span><span class="small" id="clearDesc"></span></div>
+        </div>
+        <div>
+          <span class="eq">scattering ∝ d⁶</span>
+          <p>For particles much smaller than the wavelength of light, the light each one scatters depends on the sixth power of its diameter (<b>d</b>). Halve the size and each particle scatters about 64 times less. Separate protein molecules are invisible. Clumps of them are not.</p>
+          <ul class="stages" id="clearStages">
+            <li data-max="3.5"><span>pH 2.5 to 3.5</span><div><b>Clear.</b> Whey proteins carry a strong positive charge and push each other apart. They stay as single molecules.</div></li>
+            <li data-max="4.2"><span>pH 3.6 to 4.2</span><div><b>Hazy.</b> The charge is weakening and some molecules begin to pair up.</div></li>
+            <li data-max="5.5"><span>pH 4.3 to 5.5</span><div><b>Cloudy.</b> Near pH 5 the charges cancel, so the proteins clump and can settle out.</div></li>
+            <li data-max="7"><span>pH 5.6 to 7.0</span><div><b>Milky once heated.</b> The proteins repel again, but weakly. Heat makes them unfold and stick together.</div></li>
+          </ul>
+          <p class="small">A rough picture for a heat-treated whey isolate drink. The exact ranges depend on the protein, how much of it there is and the minerals present.</p>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Why milk is white</h3><p>Milk's casein clusters are roughly 150 nanometres across and its fat droplets are larger still. Both are close to the wavelength of visible light, so they scatter every colour and the result looks white.</p></div>
+        <div class="block"><h3>Start with isolate</h3><p>Whey protein isolate is whey filtered until it is about 90% protein, with the casein and nearly all the fat and lactose gone. A concentrate still carries fat, and fat droplets scatter light, so it can never be fully clear.</p></div>
+        <div class="block"><h3>Charge keeps molecules apart</h3><p>A single whey protein molecule is only a few nanometres across, about a hundred times smaller than the wavelength of light. While the molecules stay separate, light passes straight through. Acid gives them all the same positive charge, so they push each other away.</p></div>
+        <div class="block"><h3>Why it survives heat</h3><p>Protein drinks are heat-treated. At neutral pH, heated whey proteins unfold and bond to each other, which is how a whey gel or a cloudy shake forms. In acid they still unfold, but the charge stops them joining, so the drink stays clear.</p></div>
+        <div class="block"><h3>Why it tastes like juice</h3><p>The acidity that keeps it clear also makes it tart, so citrus and fruit flavours fit and chocolate does not. With no fat and no clumps it drinks like water, not like a milkshake.</p></div>
+        <div class="block"><h3>The dry feeling</h3><p>Positively charged proteins bind to the proteins in saliva, which leaves a slightly dry, puckering feel. Balancing pH, sweetness and flavour keeps that in check.</p></div>
+        <div class="block"><h3>Why it foams</h3><p>Whey proteins are good at coating air bubbles, so a clear shake foams when shaken. The foam settles after a minute or two.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-candy" data-cat="Sugar" data-card="The candy thermometer" data-eq="hotter syrup = less water" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Sugar</span>
+        <h2>A candy thermometer measures water</h2>
+        <p>Dissolved sugar raises the boiling point of water. As a syrup boils, water leaves, the sugar gets more concentrated and the boiling temperature climbs. So the thermometer is really telling you how much water is left.</p>
+      </div>
+      <div class="cols">
+        <div class="tool">
+          <label for="candyT">Syrup temperature: <span id="candyTVal">115 °C</span></label>
+          <input type="range" id="candyT" min="100" max="180" step="1" value="115">
+          <div class="row"><span class="swatch" id="candySwatch"></span><div><span class="big" id="candyName">Soft ball</span><span class="small" id="candyDesc"></span></div></div>
+          <div><span class="small">Sugar in the syrup: <b id="candyConc">about 85%</b></span><div class="meter" aria-hidden="true"><i id="candyBar"></i></div></div>
+        </div>
+        <div>
+          <ul class="stages" id="candyStages">
+            <li data-max="109" data-conc="under 80%" data-pct="70"><span>100 to 109 °C</span><div><b>Syrup.</b> Still mostly water boiling off.</div></li>
+            <li data-max="111" data-conc="about 80%" data-pct="80"><span>110 to 111 °C</span><div><b>Thread.</b> About 80% sugar. Syrups and candied fruit.</div></li>
+            <li data-max="116" data-conc="about 85%" data-pct="85"><span>112 to 116 °C</span><div><b>Soft ball.</b> About 85%. Fudge, fondant, pralines.</div></li>
+            <li data-max="120" data-conc="about 87%" data-pct="87"><span>117 to 120 °C</span><div><b>Firm ball.</b> About 87%. Soft caramels.</div></li>
+            <li data-max="130" data-conc="about 92%" data-pct="92"><span>121 to 130 °C</span><div><b>Hard ball.</b> About 92%. Nougat, marshmallow, gummies.</div></li>
+            <li data-max="143" data-conc="about 95%" data-pct="95"><span>131 to 143 °C</span><div><b>Soft crack.</b> About 95%. Taffy, butterscotch.</div></li>
+            <li data-max="159" data-conc="about 99%" data-pct="99"><span>144 to 159 °C</span><div><b>Hard crack.</b> About 99%. Lollipops, brittle, hard candy.</div></li>
+            <li data-max="180" data-conc="nearly 100%" data-pct="100"><span>160 to 180 °C</span><div><b>Caramel.</b> Almost no water left. The sugar itself breaks down, browns and makes new flavours.</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Where the names come from</h3><p>Before thermometers, cooks dropped a little syrup into cold water. Less water left in the syrup means a harder result: a thread, a soft ball you can squash, a hard ball, then strands that crack.</p></div>
+        <div class="block"><h3>Crystal or glass</h3><p>The same syrup can set two ways. Stir it as it cools and sucrose forms many tiny crystals, the creamy snap of fudge and fondant. Leave it still and it hardens into a clear glass, as in a lollipop.</p></div>
+        <div class="block"><h3>One crystal ruins the batch</h3><p>A single stray sugar crystal on the side of the pot gives the rest something to grow on, and the whole pot can turn grainy. That is the reason for washing down the sides with a wet brush and not stirring once it boils.</p></div>
+        <div class="block"><h3>Interfering sugars</h3><p>Glucose syrup gets in the way of sucrose crystals. So does a little acid, such as cream of tartar or lemon, which splits some sucrose into glucose and fructose. Both keep candy smooth and clear.</p></div>
+        <div class="block"><h3>Why hard candy goes sticky</h3><p>Sugar glass pulls water out of the air. In a humid kitchen the surface dissolves into syrup within hours, so hard candy needs airtight packing.</p></div>
+        <div class="block"><h3>Caramel is two reactions</h3><p>Sugar alone browns by caramelisation. Add cream or butter and the milk proteins join in through Maillard reactions, which is where the rounder flavour of caramel sauce and dulce de leche comes from.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-gelato" data-cat="Sugar" data-card="Gelato" data-eq="ΔT = K × m × i" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Sugar</span>
+        <h2>Same weight of sugar, different gelato</h2>
+        <p>Anything dissolved in water gets in the way of ice forming, so the mix freezes at a lower temperature. What counts is the number of dissolved molecules, not their weight, and sugars differ a lot in how many molecules a gram contains.</p>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Sugar</th><th>Molecular weight</th><th>Molecules in 1 g</th><th>Anti-freezing power<br>(sucrose = 100)</th><th>Sweetness<br>(sucrose = 100)</th></tr></thead>
+          <tbody>
+            <tr><td>Sucrose</td><td>342 g/mol</td><td>1.76 × 10²¹</td><td>100</td><td>100</td></tr>
+            <tr><td>Dextrose</td><td>180 g/mol</td><td>3.34 × 10²¹</td><td>190</td><td>70</td></tr>
+            <tr><td>Fructose</td><td>180 g/mol</td><td>3.34 × 10²¹</td><td>190</td><td>170</td></tr>
+            <tr><td>Invert sugar</td><td>180 g/mol (a mix)</td><td>3.34 × 10²¹</td><td>190</td><td>130</td></tr>
+            <tr><td>Lactose</td><td>342 g/mol</td><td>1.76 × 10²¹</td><td>100</td><td>16</td></tr>
+            <tr><td>Trehalose</td><td>342 g/mol</td><td>1.76 × 10²¹</td><td>100</td><td>45</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cols">
+        <div>
+          <p>One gram of dextrose holds almost twice as many molecules as one gram of sucrose. Every dissolved molecule holds on to water, so more molecules means more total surface gripping water and less water free to freeze. Swap some sucrose for dextrose and the gelato is softer at the same serving temperature.</p>
+          <p>Lactose and sucrose are the same size, so they hold back ice equally, but lactose is far less sweet. Choosing sugars by both columns lets you set softness and sweetness separately.</p>
+          <span class="eq">ΔT = K × m × i</span>
+          <p><b>ΔT</b> is the drop in freezing point. <b>K</b> is 1.86 °C per mole of particles in a kilogram of water, <b>m</b> is the moles dissolved per kilogram of water, and <b>i</b> is how many particles each unit splits into.</p>
+        </div>
+        <div class="tool">
+          <label for="solute">What is dissolved</label>
+          <select id="solute">
+            <option value="sucrose">Table sugar (sucrose)</option>
+            <option value="dextrose">Dextrose</option>
+            <option value="salt">Salt</option>
+          </select>
+          <label for="conc">Amount in the mix: <span id="concVal">18%</span> by weight</label>
+          <input type="range" id="conc" min="0" max="30" step="1" value="18">
+          <div><span class="big" id="fpOut">−1.2 °C</span><span class="small">estimated temperature where ice starts to form</span></div>
+          <div class="meter" aria-hidden="true"><i id="fpBar"></i></div>
+          <p class="small">An ideal-solution estimate. Real mixes also contain lactose and milk salts, and the formula gets less accurate as concentration rises.</p>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Gelato is never fully frozen</h3><p>As ice forms, the sugar is left behind in less and less water, so the remaining syrup gets stronger and its freezing point drops further. At serving temperature a good share of the water is still liquid syrup, and that is what the scoop moves through.</p></div>
+        <div class="block"><h3>Small crystals feel smooth</h3><p>The tongue stops noticing ice crystals below roughly 50 micrometres. Freezing fast while churning makes many small crystals. Slow freezing, or thawing and refreezing, lets them grow into grit.</p></div>
+        <div class="block"><h3>Salt and alcohol hit harder</h3><p>Salt is a sixth the weight of sucrose and splits in two, which is why salted ice gets cold enough to churn ice cream. Alcohol is about a seventh the weight of sucrose, so a little liqueur softens a batch far more than the same weight of sugar.</p></div>
+        <div class="block"><h3>What else is in the mix</h3><p>Fat coats the tongue and carries flavour. Milk solids add body, but too much lactose crystallises and feels sandy. Stabilisers hold water in place so crystals grow more slowly in the display case.</p></div>
+        <div class="block"><h3>Air is an ingredient</h3><p>Gelato is churned slowly and holds much less air than ice cream, so it is denser and tastes stronger. It is also served a few degrees warmer, which is why its sugars have to be balanced for that temperature.</p></div>
+        <div class="block"><h3>Taking the milk out</h3><p>A vegan gelato loses lactose and milk proteins, which were doing part of the anti-freezing and most of the body. Something else has to do those two jobs, usually other sugars, fibres and plant proteins.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-firm" data-cat="Texture" data-card="Why food pushes back" data-eq="E = k × T ÷ l³" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Texture</span>
+        <h2>Texture is bonds per volume</h2>
+        <p>Press on a piece of food and it presses back. How hard depends on how closely the links in its internal network sit.</p>
+      </div>
+      <div class="cols">
+        <div>
+          <span class="eq">E = stress ÷ strain</span>
+          <p><b>E</b> is stiffness. Stress is how hard you push per unit of area, and strain is how far the food deforms as a fraction of its size. A stiff food needs a lot of push for a little squash.</p>
+        </div>
+        <div>
+          <span class="eq">E = k × T ÷ l³</span>
+          <p><b>l</b> is the distance between links in the network. Halve that distance and the food becomes about eight times stiffer. This one equation covers steak, gels and custards.</p>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Cooking adds links</h3><p>A steak firms as it cooks because heat makes its proteins bond at more and more points. The chef's finger test is a way of feeling how many links have formed.</p></div>
+        <div class="block"><h3>Gels are mostly water</h3><p>A gel can be 99% water held in place by a sparse network. Gelatin melts near body temperature, so it dissolves in the mouth. Agar stays set until about 85 °C, so it can be served hot.</p></div>
+        <div class="block"><h3>Why custard curdles</h3><p>Overheat a custard and the egg proteins bond too tightly. The network shrinks and squeezes water out, leaving lumps in a thin liquid.</p></div>
+        <div class="block"><h3>Tenderising is cutting links</h3><p>Long, slow cooking turns tough collagen into gelatin. Enzymes do it without heat: the ones in fresh pineapple and papaya cut proteins apart, which is also why fresh pineapple stops a gelatin dessert from setting.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-thick" data-cat="Texture" data-card="Thickeners" data-eq="longer chains, thicker liquid" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Texture</span>
+        <h2>Long molecules thicken</h2>
+        <p>A few long chains tangle and slow everything around them. That is how a tiny dose of thickener changes a whole pot.</p>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Why so little goes so far</h3><p>Each long chain sweeps out a large volume and catches on its neighbours. Xanthan thickens a sauce at well under 1%. Honey is several thousand times thicker than water with no long chains at all, only because there is so little water in it.</p></div>
+        <div class="block"><h3>Starch needs heat</h3><p>Starch granules do nothing in cold water. Between about 60 and 70 °C they swell, burst and release their chains, and the liquid thickens. Mixing starch with cold water or fat first keeps the granules apart so they do not form lumps.</p></div>
+        <div class="block"><h3>Why bread goes stale</h3><p>On cooling, starch chains slowly line up again and push water out. That firms a set custard overnight and makes bread stale, even in a sealed bag.</p></div>
+        <div class="block"><h3>Thin when moving</h3><p>Many thickened liquids thin when stirred or squeezed, then thicken again at rest. That is why ketchup needs a shake and then stays on the chips.</p></div>
+        <div class="block"><h3>Gums in gelato</h3><p>Stabilisers such as locust bean gum and guar hold water in place, which slows the growth of ice crystals and makes gelato melt more slowly. Some need heating to dissolve fully, and others work cold.</p></div>
+        <div class="block"><h3>Or take the water out</h3><p>Reducing a sauce thickens it the other way round. Boiling off water leaves everything else more crowded.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-emulsion" data-cat="Mixtures" data-card="Making enemies mix" data-eq="droplets over 64% → solid-like" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Mixtures</span>
+        <h2>Oil and water need a go-between</h2>
+        <p>An emulsifier has one end that likes water and one end that likes oil, so it sits at the boundary and keeps droplets from merging.</p>
+      </div>
+      <div class="prose">
+        <span class="eq">droplets over 64% of the volume → solid-like</span>
+        <p>The lecithin in egg yolk is the classic emulsifier. Mayonnaise can be about 80% oil. Once droplets fill more than roughly 64% of the space they jam against each other and the liquid behaves like a soft solid.</p>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Which is inside which</h3><p>Milk, cream and mayonnaise are oil droplets in water. Butter is the reverse, water droplets in fat. Churning cream into butter flips one into the other.</p></div>
+        <div class="block"><h3>How emulsions break</h3><p>Droplets rise, touch and merge until the oil sits on top. Smaller droplets rise more slowly, which is why homogenised milk does not form a cream layer.</p></div>
+        <div class="block"><h3>Warm emulsions are fragile</h3><p>Hollandaise relies on yolk, and yolk proteins set from about 65 °C. Go too hot and the sauce scrambles. Go too cold and the butter hardens and the sauce splits.</p></div>
+        <div class="block"><h3>Foams are emulsions of air</h3><p>Whisking unfolds egg-white proteins at the surface of each bubble. A trace of yolk fat gets in the way and the foam will not form. Sugar thickens the liquid between bubbles and steadies a meringue.</p></div>
+        <div class="block"><h3>Whipped cream needs cold</h3><p>Cream whips because partly solid fat droplets stick together around the air bubbles. Warm cream has liquid fat and will not hold. In ice cream the same partly merged fat forms the scaffold that holds the air.</p></div>
+        <div class="block"><h3>Ganache is one too</h3><p>Chocolate ganache is cocoa butter dispersed in the water of the cream. When it looks greasy and split, a little warm liquid and stirring usually brings it back.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-brown" data-cat="Flavour" data-card="The flavour of brown" data-eq="amino acids + sugars → flavour" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Flavour</span>
+        <h2>Browning needs a dry surface</h2>
+        <p>The flavours of seared steak, toast and roasted coffee come from reactions between amino acids and sugars that make hundreds of new molecules.</p>
+      </div>
+      <div class="prose">
+        <span class="eq">amino acids + sugars → colour and flavour</span>
+        <p>These Maillard reactions run fast above roughly 140 °C. Water holds a wet surface at 100 °C, so nothing browns until the surface dries. That is the reason to pat a steak dry and to give food room in the pan.</p>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Not every sugar joins in</h3><p>The reaction needs a sugar with a reactive end, such as glucose, fructose or lactose. Table sugar has none until it is split. This is why milk and honey brown so readily.</p></div>
+        <div class="block"><h3>pH is a dial</h3><p>Alkaline conditions speed browning. A pinch of baking soda browns onions faster, and a lye bath gives pretzels their dark crust. Acid slows it down.</p></div>
+        <div class="block"><h3>Slow browning exists</h3><p>Given enough time the same reactions run at low temperatures. Black garlic is held warm for weeks, and dulce de leche browns slowly below boiling.</p></div>
+        <div class="block"><h3>Caramelisation is different</h3><p>Caramel is sugar breaking down with no amino acids involved. Fructose starts near 110 °C, while glucose and sucrose need about 160 °C.</p></div>
+        <div class="block"><h3>The apple kind of brown</h3><p>A cut apple or avocado browns for another reason: an enzyme reacts with oxygen. Acid, a quick blanch or keeping air out stops it.</p></div>
+        <div class="block"><h3>Too far</h3><p>Past deep brown the flavours turn bitter and burnt. For fried and baked starchy foods the usual advice is to aim for golden.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-water" data-cat="Shelf life" data-card="The water that counts" data-eq="aw = p ÷ p₀" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Shelf life</span>
+        <h2>Available water decides shelf life</h2>
+        <p>Microbes need water they can use, not just water. Water activity measures how much of a food's water is free.</p>
+      </div>
+      <div class="cols">
+        <div>
+          <span class="eq">aw = p ÷ p₀</span>
+          <p>Water activity compares the vapour pressure of water in a food (<b>p</b>) with that of pure water (<b>p₀</b>). It runs from 0 to 1. Sugar and salt hold on to water molecules so they are not available, which lowers it.</p>
+          <p>It is not the same as water content. Jam feels wet and keeps for months. Fresh bread feels dry and moulds in days.</p>
+        </div>
+        <div>
+          <ul class="stages">
+            <li><span>0.97 to 0.99</span><div>Fresh meat, fish, fruit and milk.</div></li>
+            <li><span>about 0.95</span><div>Bread and many cheeses.</div></li>
+            <li><span>about 0.91</span><div>Below this, most bacteria stop growing.</div></li>
+            <li><span>about 0.80</span><div>Jam. Below this, most moulds stop growing.</div></li>
+            <li><span>about 0.60</span><div>Honey and dried fruit. Almost nothing grows below this.</div></li>
+            <li><span>0.20 to 0.30</span><div>Crackers and crisp biscuits.</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Water moves until it is even</h3><p>Put a moist filling against a crisp biscuit and water travels from the higher water activity to the lower, until the two match. The biscuit goes soft and the filling dries. Matching the two before assembly is how a filled product stays right.</p></div>
+        <div class="block"><h3>Crispness has a limit</h3><p>Crisp foods soften once they pass a water activity of roughly 0.4 to 0.5. This is why crackers go stale when a pack is left open, with no change in the recipe.</p></div>
+        <div class="block"><h3>Ingredients that hold water</h3><p>Sugar, salt, glycerol and sorbitol all tie up water. They let a product stay soft and moist while keeping its water activity low.</p></div>
+        <div class="block"><h3>One hurdle is rarely enough</h3><p>Shelf life usually comes from several barriers together: water activity, acidity, heat treatment, packaging and cold. Acidity has its own well-known line at pH 4.6, below which the botulism bacterium cannot grow.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-ferment" data-cat="Microbes" data-card="Letting microbes cook" data-eq="sugar → acid, alcohol, gas" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Microbes</span>
+        <h2>Microbes and enzymes cook too</h2>
+        <p>Fermentation is microbes turning sugars into acid, alcohol and carbon dioxide. The cook's job is to make conditions right for the microbes you want and wrong for the rest.</p>
+      </div>
+      <div class="cols">
+        <div>
+          <span class="eq">sugar → acid, alcohol, gas</span>
+          <p>The acid or alcohol the microbes make also protects the food from other microbes, which is why fermentation began as a way to keep food.</p>
+        </div>
+        <div>
+          <ul class="stages">
+            <li><span>Lactic bacteria</span><div>Sugar into lactic acid. Yoghurt, kefir, kimchi, sauerkraut, sourdough.</div></li>
+            <li><span>Yeast</span><div>Sugar into carbon dioxide and alcohol. Bread, beer, wine.</div></li>
+            <li><span>Acetic bacteria</span><div>Alcohol into vinegar, with oxygen. Vinegar, kombucha.</div></li>
+            <li><span>Moulds</span><div>Enzymes that break starch and protein into sugars and savoury amino acids. Soy sauce, miso, tempeh, blue cheese.</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>The dials you can turn</h3><p>Salt, temperature, oxygen, sugar and time decide who wins. About 2% salt in cabbage holds back most microbes while lactic bacteria carry on, and that is all sauerkraut is.</p></div>
+        <div class="block"><h3>Yoghurt joins two topics</h3><p>Bacteria turn lactose into lactic acid. As the pH falls towards 4.6 the casein sets into a gel. It is fermentation doing the work of the acid in the protein notes.</p></div>
+        <div class="block"><h3>Enzymes do the chemistry</h3><p>Enzymes are proteins that speed up one specific reaction. They work faster as it gets warmer, roughly doubling every 10 °C, until the heat unfolds them and they stop for good.</p></div>
+        <div class="block"><h3>Enzymes without microbes</h3><p>Rennet cuts one milk protein and sets cheese curd with no acid. Enzymes in malt turn starch into sugar for brewing. The enzymes in fresh pineapple cut proteins, tenderising meat and ruining gelatin.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer><div class="wrap"><span>Edible Alchemy by Lynn · Food science notebook</span><span>Working notes, in my own words.</span></div></footer>
+
+<script>
+(function(){
+  "use strict";
+  function $(id){return document.getElementById(id)}
+  function mod(n,m){return ((n%m)+m)%m}
+  var calm = false;
+  try { calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches } catch(e){}
+
+  // ---------- wheel of topic cards ----------
+  var topics = Array.prototype.slice.call(document.querySelectorAll(".topic"));
+  var N = topics.length, STEP = 360/N, stage = $("stage"), ring = $("ring"), cards = [];
+  var idx = 0, angle = 0, R = 380, dragging = false, moved = 0, lastX = 0, onShow = {};
+  topics.forEach(function(t,i){
+    var b = document.createElement("button"); b.type = "button"; b.className = "card"; b.id = "card-"+t.id.slice(6);
+    var c = document.createElement("span"), n = document.createElement("b"), q = document.createElement("i");
+    c.className = "mono"; c.textContent = t.getAttribute("data-cat"); n.textContent = t.getAttribute("data-card"); q.textContent = t.getAttribute("data-eq");
+    b.appendChild(c); b.appendChild(n); b.appendChild(q);
+    b.addEventListener("click", function(){ if (moved < 6) select(i, true) });
+    ring.appendChild(b); cards.push(b);
+  });
+  function place(){
+    var cw = cards[0].offsetWidth || 180;
+    R = Math.round(cw/2/Math.tan(Math.PI/N)) + 26;
+    cards.forEach(function(b,i){ b.style.transform = "rotateY("+(i*STEP)+"deg) translateZ("+R+"px)" });
+    turn();
+  }
+  function turn(){ ring.style.transform = "translateZ(-"+R+"px) rotateY("+angle+"deg)" }
+  function select(i, byUser){
+    idx = mod(i, N);
+    var want = -idx*STEP; angle = want + 360*Math.round((angle - want)/360); turn();
+    topics.forEach(function(t,k){ t.hidden = k !== idx; cards[k].setAttribute("aria-pressed", k === idx ? "true" : "false") });
+    $("nowName").textContent = topics[idx].getAttribute("data-card"); $("nowCount").textContent = (idx+1)+" / "+N;
+    var key = topics[idx].id.slice(6);
+    if (onShow[key]) onShow[key]();
+    if (byUser){ try { history.replaceState(null, "", "#"+key) } catch(e){} }
+  }
+  stage.addEventListener("pointerdown", function(e){ dragging = true; moved = 0; lastX = e.clientX; });
+  window.addEventListener("pointermove", function(e){
+    if (!dragging) return;
+    var dx = e.clientX - lastX; lastX = e.clientX; moved += Math.abs(dx);
+    if (moved >= 6){ stage.classList.add("dragging"); angle += dx*0.28; turn(); }
+  });
+  function drop(){
+    if (!dragging) return;
+    dragging = false; stage.classList.remove("dragging");
+    if (moved >= 6) select(Math.round(-angle/STEP), true);
+    setTimeout(function(){ moved = 0 }, 0);
+  }
+  window.addEventListener("pointerup", drop); window.addEventListener("pointercancel", drop);
+  $("prev").addEventListener("click", function(){ select(idx-1, true) });
+  $("next").addEventListener("click", function(){ select(idx+1, true) });
+  stage.addEventListener("keydown", function(e){
+    if (e.key === "ArrowLeft"){ select(idx-1, true); cards[idx].focus(); e.preventDefault() }
+    if (e.key === "ArrowRight"){ select(idx+1, true); cards[idx].focus(); e.preventDefault() }
+  });
+  window.addEventListener("resize", place);
+
+  // ---------- heat balance ----------
+  var hW = $("hWater"), hE = $("hEggs"), hS = $("hStart");
+  function heat(){
+    var mw = Number(hW.value), n = Number(hE.value), me = n*55, te = Number(hS.value), cw = 4.18, ce = 3.3;
+    var tf = (mw*cw*100 + me*ce*te)/(mw*cw + me*ce), q = me*ce*(tf-te)/1000;
+    $("hWaterVal").textContent = mw+" g"; $("hEggsVal").textContent = n; $("hStartVal").textContent = te+" °C";
+    $("hOut").textContent = tf.toFixed(1)+" °C";
+    $("hNote").textContent = (n === 1 ? "The egg takes in " : "The eggs take in ")+q.toFixed(1)+" kJ and the water cools by "+(100-tf).toFixed(1)+" °C. More water means a smaller drop, which is why a big pot keeps its boil.";
+  }
+  [hW,hE,hS].forEach(function(el){ el.addEventListener("input", heat) }); heat();
+
+  // ---------- stage pickers (egg, candy) ----------
+  function pick(listId, t){
+    var items = $(listId).children, hit = null;
+    for (var i=0;i<items.length;i++){
+      var on = !hit && t <= Number(items[i].getAttribute("data-max"));
+      items[i].classList.toggle("on", on); if (on) hit = items[i];
+    }
+    var b = hit.querySelector("b").textContent, d = hit.querySelector("div").textContent.replace(b, "").trim();
+    return [b.replace(/\.$/, ""), d, hit];
+  }
+  function mix(a, b, f){ return "rgb("+a.map(function(v,i){ return Math.round(v + (b[i]-v)*f) }).join(",")+")" }
+  function ramp(t, lo, hi){ return Math.max(0, Math.min(1, (t-lo)/(hi-lo))) }
+
+  var eggT = $("eggT");
+  function egg(){
+    var t = Number(eggT.value), s = pick("eggStages", t);
+    $("eggTVal").textContent = t+" °C"; $("eggName").textContent = s[0]; $("eggDesc").textContent = s[1];
+    $("eggWhite").setAttribute("fill-opacity", (0.25 + 0.6*ramp(t,58,64) + 0.15*ramp(t,64,70)).toFixed(2));
+    $("eggYolk").setAttribute("fill", mix([245,154,27],[242,207,99], ramp(t,64,70)));
+    $("eggShine").setAttribute("opacity", (0.7*(1-ramp(t,63,68))).toFixed(2));
+  }
+  eggT.addEventListener("input", egg); egg();
+
+  var clearPH = $("clearPH");
+  function clearDrink(){
+    var v = Number(clearPH.value), s = pick("clearStages", v);
+    $("clearPHVal").textContent = "pH "+v.toFixed(1); $("clearName").textContent = s[0]; $("clearDesc").textContent = s[1];
+    var haze = v <= 3.5 ? 0 : v <= 4.2 ? 0.5*ramp(v,3.5,4.2) : v <= 5.5 ? 0.5+0.45*ramp(v,4.2,4.9) : 0.95-0.2*ramp(v,5.5,7);
+    $("clearHaze").setAttribute("opacity", haze.toFixed(2));
+  }
+  clearPH.addEventListener("input", clearDrink); clearDrink();
+
+  var candyT = $("candyT");
+  function candy(){
+    var t = Number(candyT.value), s = pick("candyStages", t);
+    $("candyTVal").textContent = t+" °C"; $("candyName").textContent = s[0]; $("candyDesc").textContent = s[1];
+    $("candyConc").textContent = s[2].getAttribute("data-conc");
+    $("candyBar").style.width = s[2].getAttribute("data-pct")+"%";
+    $("candySwatch").style.background = mix([250,243,214],[150,72,18], ramp(t,150,180));
+  }
+  candyT.addEventListener("input", candy); candy();
+
+  // ---------- steak thickness ----------
+  var D = 1.4e-7, thick = $("thick");
+  function steak(){
+    var cm = Number(thick.value), half = cm/200, t = half*half/(4*D);
+    $("thickVal").textContent = cm.toFixed(1)+" cm";
+    $("thickOut").textContent = t < 90 ? Math.round(t)+" s" : (t/60).toFixed(1)+" min";
+  }
+  thick.addEventListener("input", steak); steak();
+
+  // ---------- gelato freezing point ----------
+  var SOL = {sucrose:{M:342.3,i:1}, dextrose:{M:180.2,i:1}, salt:{M:58.44,i:2}}, conc = $("conc"), solute = $("solute");
+  function freeze(){
+    var pct = Number(conc.value), s = SOL[solute.value], dT = 1.86*((pct/s.M)/((100-pct)/1000))*s.i;
+    $("concVal").textContent = pct+"%";
+    $("fpOut").textContent = (dT < 0.05 ? "0.0" : "−"+dT.toFixed(1))+" °C";
+    $("fpBar").style.width = Math.min(100, dT/12*100)+"%";
+  }
+  conc.addEventListener("input", freeze); solute.addEventListener("change", freeze); freeze();
+
+  // ---------- random walk ----------
+  var cv = $("walk"), ctx = cv.getContext("2d"), P = 500, xs = [], ys = [], steps = 0, MAX = 2400, col = {};
+  function tint(){
+    var cs = getComputedStyle(document.documentElement);
+    ["bg","surface","ink","muted","accent","berry","line"].forEach(function(k){ col[k] = cs.getPropertyValue("--"+k).trim() });
+  }
+  function walkStep(){
+    var s = 0.012;
+    for (var i=0;i<P;i++){
+      xs[i] += (Math.random()-0.5)*2*s; ys[i] += (Math.random()-0.5)*2*s;
+      if (ys[i] < 0) ys[i] = -ys[i]; if (ys[i] > 1) ys[i] = 2-ys[i];
+      if (xs[i] < 0) xs[i] += 1; if (xs[i] > 1) xs[i] -= 1;
+    }
+    steps++;
+  }
+  function draw(){
+    var dpr = Math.min(window.devicePixelRatio||1, 2), w = cv.clientWidth, h = cv.clientHeight;
+    if (!w || !h) return;
+    if (cv.width !== Math.round(w*dpr)){ cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr) }
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
+    var px = 16, top = 30, bot = h-34, sh = bot-top, sw = w-px*2, sum = 0;
+    ctx.fillStyle = col.surface; ctx.fillRect(px, top, sw, sh);
+    ctx.strokeStyle = col.line; ctx.lineWidth = 1; ctx.strokeRect(px+0.5, top+0.5, sw-1, sh-1);
+    ctx.fillStyle = col.accent; ctx.fillRect(px, bot, sw, 6);
+    ctx.fillStyle = col.berry; ctx.globalAlpha = 0.75;
+    for (var i=0;i<P;i++){ sum += ys[i]*ys[i]; ctx.beginPath(); ctx.arc(px + xs[i]*sw, bot - ys[i]*sh, 2, 0, 6.2832); ctx.fill(); }
+    ctx.globalAlpha = 1;
+    var rms = Math.sqrt(sum/P), y = bot - rms*sh;
+    ctx.setLineDash([6,5]); ctx.strokeStyle = col.ink; ctx.beginPath(); ctx.moveTo(px, y); ctx.lineTo(px+sw, y); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = col.muted; ctx.font = '500 11px "DM Mono",ui-monospace,monospace'; ctx.textBaseline = "middle"; ctx.textAlign = "left";
+    ctx.fillText("TOP OF STEAK", px, 15); ctx.fillText("PAN", px, h-13);
+    ctx.fillStyle = col.ink; ctx.textAlign = "right"; ctx.fillText("TYPICAL REACH", px+sw-6, Math.max(top+10, y-9));
+    $("walkStat").textContent = "Step "+steps+" · heat has reached about "+Math.round(rms*100)+"% of the way up";
+  }
+  function begin(){
+    xs = []; ys = []; steps = 0;
+    for (var i=0;i<P;i++){ xs.push(Math.random()); ys.push(0) }
+    if (calm){ for (var k=0;k<700;k++) walkStep(); steps = MAX; }
+    draw();
+  }
+  function loop(){
+    requestAnimationFrame(loop);
+    if (document.hidden || steps >= MAX || topics[idx].id !== "topic-steak") return;
+    for (var k=0;k<3;k++) walkStep();
+    draw();
+  }
+  tint(); begin();
+  onShow.steak = begin;
+  $("walkReset").addEventListener("click", begin);
+  window.addEventListener("resize", draw);
+  try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(){ tint(); draw() }) } catch(e){}
+  new MutationObserver(function(){ tint(); draw() }).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+  if (!calm) requestAnimationFrame(loop);
+
+  // ---------- start ----------
+  place();
+  var first = 0, want = (location.hash || "").slice(1);
+  topics.forEach(function(t,i){ if (t.id === "topic-"+want) first = i });
+  ring.style.transition = "none"; select(first, false);
+  requestAnimationFrame(function(){ ring.style.transition = "" });
+  try { document.fonts.ready.then(place) } catch(e){}
+})();
+</script>
+</body>
+</html>

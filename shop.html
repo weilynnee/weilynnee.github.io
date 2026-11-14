@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Edible Alchemy Shop</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap">
+<style>
+/* Layout: a shop door with a hanging sign. The sign carries the excuse; tap it for another one. */
+:root{
+  --bg:#C5DCF0; --surface:#E4EFF9; --ink:#0F1B3D; --muted:#46557A; --line:#9DBEDD;
+  --accent:#FFC428; --on-accent:#0F1B3D; --berry:#1D3F94; --mark:#FFC428;
+  --display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1B3D; --surface:#182650; --ink:#DCEBF8; --muted:#9FB4D3; --line:#2B3D6E;
+    --accent:#FFC428; --on-accent:#0F1B3D; --berry:#FFC428; --mark:#8A6A10; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1B3D; --surface:#182650; --ink:#DCEBF8; --muted:#9FB4D3; --line:#2B3D6E;
+  --accent:#FFC428; --on-accent:#0F1B3D; --berry:#FFC428; --mark:#8A6A10; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{width:100%;max-width:1160px;margin-inline:auto;
+  padding-left:max(clamp(16px,4vw,40px),env(safe-area-inset-left,0px));
+  padding-right:max(clamp(16px,4vw,40px),env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--berry);outline-offset:3px;border-radius:4px}
+h1,h2{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-0.02em}
+p{margin:0}
+.mono{font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.eyebrow{color:var(--berry)}
+.eyebrow::before{content:"";display:inline-block;width:.6em;height:.6em;border-radius:2px;background:var(--accent);margin-right:.55em}
+
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem 1.5rem;padding-block:1.25rem}
+.brand{font-family:var(--display);font-weight:800;font-size:1.15rem;text-decoration:none}
+.brand span{background:var(--accent);color:var(--on-accent);padding:.05em .35em;border-radius:3px;margin-left:.2em}
+.nav{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;font-weight:500}
+.nav a{text-decoration:none;padding-block:.25rem;border-bottom:2px solid transparent}
+.nav a:hover,.nav a[aria-current]{border-bottom-color:var(--accent)}
+
+main{display:flex;flex-direction:column;gap:clamp(2.5rem,6vw,4rem);padding-bottom:4rem}
+.door{display:flex;flex-direction:column;align-items:center;gap:1.5rem;text-align:center;padding-top:.5rem}
+.hang{display:flex;flex-direction:column;align-items:center;width:min(100%,34rem);transform-origin:50% 8px;transform:rotate(-2deg);background:none;border:0;padding:0;color:inherit;font:inherit;cursor:pointer}
+.hang svg{width:62%;height:auto;display:block;color:var(--ink)}
+.board{width:100%;margin-top:-2px;background:var(--accent);color:var(--on-accent);border:4px solid var(--on-accent);border-radius:18px;padding:clamp(1.25rem,4vw,2.25rem);display:flex;flex-direction:column;gap:.6rem;box-shadow:0 10px 0 -4px var(--line)}
+.board .mono{font-size:.8125rem}
+.board h1{font-size:clamp(2.4rem,8vw,4.4rem);line-height:.95;font-weight:800}
+.excuse{font-family:var(--display);font-weight:700;font-size:clamp(1.15rem,3.4vw,1.7rem);line-height:1.15;text-wrap:balance;min-height:2.4em;display:flex;align-items:center;justify-content:center}
+.hang.swing{animation:swing 1.4s ease-out}
+@keyframes swing{0%{transform:rotate(-2deg)}18%{transform:rotate(7deg)}40%{transform:rotate(-6deg)}62%{transform:rotate(3deg)}82%{transform:rotate(-3deg)}100%{transform:rotate(-2deg)}}
+.hint{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;font:600 1rem var(--body);padding:.7rem 1.15rem;border-radius:999px;border:2px solid var(--ink);background:transparent;color:var(--ink);text-decoration:none;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.row{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center}
+
+.shelf{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:clamp(1.25rem,4vw,3rem);align-items:start;border-top:2px solid var(--ink);padding-top:1.75rem}
+.shelf > div{display:flex;flex-direction:column;gap:.7rem;min-width:0}
+h2{font-size:clamp(1.6rem,3.4vw,2.4rem);line-height:1.05;font-weight:700}
+.shelf p{color:var(--muted);font-size:1.0625rem}
+.item{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.4rem 1rem;padding-block:.9rem;border-bottom:1px solid var(--line)}
+.item b{font-family:var(--display);font-size:1.25rem}
+.item span{color:var(--muted)}
+.tag{font-family:var(--mono);font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .55rem;border-radius:4px;border:1px solid var(--berry);color:var(--berry)}
+
+footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);color:var(--muted);font-size:.875rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between}
+@media (max-width:760px){.shelf{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.hang.swing{animation:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./">Edible Alchemy<span>by Lynn</span></a>
+  <nav class="nav" aria-label="Pages">
+    <a href="./">Portfolio</a><a href="shop.html" aria-current="page">Shop</a><a href="science.html">Food science</a>
+  </nav>
+</div></header>
+
+<main>
+  <div class="wrap">
+    <section class="door">
+      <span class="mono eyebrow">Shop</span>
+      <button class="hang" id="sign" type="button" aria-describedby="signHint">
+        <svg viewBox="0 0 200 62" aria-hidden="true"><path d="M100 8 L26 60 M100 8 L174 60" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="100" cy="8" r="6" fill="currentColor"/></svg>
+        <span class="board">
+          <span class="mono">Sorry, we're</span>
+          <h1>Opening later</h1>
+          <span class="excuse" id="excuse" aria-live="polite">Not enough time. Maybe after my sleep.</span>
+        </span>
+      </button>
+      <p class="hint mono" id="signHint">Tap the sign for another excuse</p>
+      <div class="row">
+        <a class="btn solid" href="./#contact">Can't wait? Ask me directly</a>
+        <a class="btn" href="./#work">See what I'm making</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section class="shelf">
+      <div>
+        <span class="mono eyebrow">When it opens</span>
+        <h2>What will be on the shelf</h2>
+        <p>The shop will sell things I have developed myself. It opens when the first product is ready and I have slept.</p>
+      </div>
+      <div>
+        <div class="item"><div><b>Newman Clear Protein</b><br><span>First in line.</span></div><span class="tag">Not yet</span></div>
+        <div class="item"><div><b>More from my brands</b><br><span>Added as each one is ready.</span></div><span class="tag">Later</span></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer><div class="wrap"><span>Edible Alchemy by Lynn · Shop</span><span>Nothing is for sale here yet.</span></div></footer>
+
+<script>
+(function(){
+  "use strict";
+  var lines = [
+    "Not enough time. Maybe after my sleep.",
+    "The founder is in the kitchen and cannot be reached.",
+    "Stock count: one prototype. I ate it.",
+    "Still choosing between fourteen versions of the same recipe.",
+    "Closed for R&D. It is always R&D.",
+    "The checkout is ready. The products are still being tasted."
+  ];
+  var i = 0, sign = document.getElementById("sign"), out = document.getElementById("excuse");
+  function swing(){ sign.classList.remove("swing"); void sign.offsetWidth; sign.classList.add("swing"); }
+  sign.addEventListener("click", function(){ i = (i+1) % lines.length; out.textContent = lines[i]; swing(); });
+  swing();
+})();
+</script>
+</body>
+</html>
