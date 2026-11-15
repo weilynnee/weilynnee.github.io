@@ -29,7 +29,7 @@ html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 }
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1160px;margin-inline:auto;
+.wrap{max-width:1600px;margin-inline:auto;
   padding-left:max(clamp(16px,4vw,40px),env(safe-area-inset-left,0px));
   padding-right:max(clamp(16px,4vw,40px),env(safe-area-inset-right,0px))}
 a{color:inherit}
@@ -162,7 +162,57 @@ dialog.dlg::backdrop{background:rgba(16,22,40,.62)}
 .dlg-top > div{display:flex;flex-direction:column;gap:.6rem;align-items:flex-start;min-width:0}
 .dlg-top h3{font-size:clamp(1.9rem,5vw,3rem);line-height:1.02;font-weight:800}
 .dlg-top .tag{color:var(--berry);border-color:var(--berry)}
-.dlg-top .round{flex:none;font-size:1.4rem}
+.dlg-top{padding-right:3.25rem}
+.dlg-x{position:sticky;top:0;z-index:5;height:0;display:flex;justify-content:flex-end}
+.dlg-x .round{flex:none;margin:.75rem .75rem 0 0;background:var(--surface);font-size:1.4rem;box-shadow:0 0 0 4px var(--surface)}
+.rich{gap:clamp(1.75rem,4vw,2.75rem)}
+.rich h4{font-family:var(--display);font-size:clamp(1.4rem,3vw,2rem);line-height:1.08;letter-spacing:-0.02em;margin:0;text-wrap:balance}
+.rich p{color:var(--muted);font-size:1.0625rem}
+.rich .cap{font-size:.875rem;margin-top:.45rem}
+.m-lede{max-width:42rem}
+.m-eye{color:var(--berry)}
+.m-eye::before{content:"";display:inline-block;width:.6em;height:.6em;border-radius:2px;background:var(--accent);margin-right:.55em}
+.m-fig,.m-pans figure,.m-room figure{margin:0;min-width:0}
+.m-fig img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:14px}
+.m-fig img.m-wide{aspect-ratio:16/10}
+.m-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,8.5rem),1fr));gap:0 1.25rem;margin:0;border-top:2px solid var(--ink)}
+.m-facts div{padding-block:.7rem;border-bottom:1px solid var(--line);min-width:0}
+.m-facts dt{font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.m-facts dd{margin:0;font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-0.01em}
+.m-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.25rem,4vw,2.5rem);align-items:start}
+.m-two > div,.m-block,.m-chef{display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.m-say{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3.2vw,2.1rem)!important;line-height:1.15;letter-spacing:-0.01em;color:var(--ink)!important;border-left:4px solid var(--accent);padding-left:1rem;max-width:46rem;text-wrap:balance}
+.m-range{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.m-range li{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:.2rem 1rem;padding-block:.75rem;border-bottom:1px solid var(--line);color:var(--muted)}
+.m-range li b{font-family:var(--display);font-size:1.1rem;color:var(--ink)}
+.m-pans{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:.9rem}
+.m-pans img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:12px}
+.m-room{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:.9rem}
+.m-room img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:12px}
+.m-link{font-weight:600;text-decoration-color:var(--accent);text-underline-offset:.2em}
+.m-camp{display:flex;flex-direction:column;gap:1.1rem;background:var(--bg);border:1px solid var(--line);border-top:6px solid var(--accent);border-radius:16px;padding:clamp(1rem,3vw,1.75rem)}
+.m-line{font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,7vw,4.4rem)!important;line-height:.98;letter-spacing:-0.02em;color:var(--ink)!important;text-wrap:balance}
+.m-ads{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,12.5rem),1fr));gap:.9rem}
+.m-ad{position:relative;margin:0;aspect-ratio:4/5;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;min-width:0;background:#0F1B3D;color:#FFFFFF;container-type:inline-size}
+.m-ad img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.m-ad::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(15,27,61,0) 30%,rgba(15,27,61,.88))}
+.m-ad figcaption{position:relative;z-index:1;padding:8%;display:flex;flex-direction:column;gap:.5rem}
+.m-ad p{font-family:var(--display);font-weight:800;font-size:clamp(1.1rem,9.5cqw,2rem);line-height:1.03;letter-spacing:-0.02em;color:inherit;text-wrap:balance}
+.m-ad .mono{font-size:.625rem;opacity:.9}
+.m-ad.type{background:#FFC428;color:#0F1B3D;justify-content:space-between}
+.m-ad.type::after{display:none}
+.m-ad.type p{font-size:clamp(1.4rem,13cqw,2.6rem)}
+.m-ad.type.dark{background:#0F1B3D;color:#FFC428}
+.m-ad.wide{aspect-ratio:16/9;border-radius:16px}
+.m-ad.wide p{font-size:clamp(1.6rem,7cqw,4.4rem)}
+.m-ad.top{justify-content:flex-start}
+.m-ad.top::after{background:linear-gradient(rgba(15,27,61,.86),rgba(15,27,61,0) 62%)}
+.m-ad.top figcaption{max-width:62%}
+.m-ad.top .mono{font-size:clamp(.625rem,1.5cqw,.85rem)}
+.m-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:1.1rem 2rem}
+.m-end{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem 2rem;border-top:2px solid var(--ink);padding-top:1.25rem}
+.m-end > div{display:flex;flex-direction:column;gap:.3rem;min-width:0}
+@media (max-width:700px){.m-two{grid-template-columns:minmax(0,1fr)} .m-range li{grid-template-columns:minmax(0,1fr)}}
 .dlg-photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:.75rem}
 .dlg-photos img,.slot{width:100%;aspect-ratio:4/3;border-radius:10px;object-fit:cover;display:block}
 .slot{border:1.5px dashed var(--line);display:grid;place-items:center;color:var(--muted);font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;background:var(--bg)}
@@ -340,7 +390,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
         <h3>Brands and products I have worked on</h3>
         <p class="cap">Tap a card to zoom in for photos and the full story.</p>
         <div class="case-grid">
-          <button class="case" type="button" id="case0" data-case="0"><span class="tag">Gelato shop launch</span><span class="case-name">Mylo's</span><span class="case-tease">Launching a gelato shop.</span><span class="case-open">Tap to open</span></button>
+          <button class="case" type="button" id="case0" data-case="0"><span class="tag">Gelato shop launch</span><span class="case-name">Mylo's</span><span class="case-tease">Twenty-three flavours in a glasshouse at Gardens by the Bay.</span><span class="case-open">Tap for the full story</span></button>
           <button class="case" type="button" id="case1" data-case="1"><span class="tag">Client project</span><span class="case-name">Kee Corner</span><span class="case-tease">Details to add.</span><span class="case-open">Tap to open</span></button>
           <button class="case" type="button" id="case2" data-case="2"><span class="tag">Product development</span><span class="case-name">Vegan cakes and desserts</span><span class="case-tease">Details to add.</span><span class="case-open">Tap to open</span></button>
           <button class="case" type="button" id="case3" data-case="3"><span class="tag">Product development</span><span class="case-name">Soft serve premix</span><span class="case-tease">Details to add.</span><span class="case-open">Tap to open</span></button>
@@ -422,13 +472,117 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
 </main>
 
 <dialog class="dlg" id="caseDlg" aria-labelledby="dlgName">
-  <div class="dlg-in">
+  <div class="dlg-x"><button class="round" id="dlgClose" type="button" aria-label="Close">&times;</button></div>
+  <div class="dlg-in" id="dlgPlain">
     <div class="dlg-top">
       <div><span class="tag" id="dlgTag"></span><h3 id="dlgName"></h3></div>
-      <button class="round" id="dlgClose" type="button" aria-label="Close">&times;</button>
     </div>
     <div class="dlg-photos" id="dlgPhotos"></div>
     <div class="dlg-cols"><dl id="dlgFacts"></dl><div class="dlg-text" id="dlgText"></div></div>
+  </div>
+
+  <div class="dlg-in rich" id="rich-mylos" hidden>
+    <div class="dlg-top">
+      <div>
+        <span class="tag">Gelato shop launch · R&amp;D consulting</span>
+        <h3 id="mylosName">Mylo's: twenty-three flavours in a glasshouse.</h3>
+        <p class="m-lede">In 2021 a glasshouse café at Gardens by the Bay became a gelato shop. I worked on the menu with Chef Michael Wilson, from the gelato to the bagels, the waffle and the treats for dogs.</p>
+      </div>
+    </div>
+    <figure class="m-fig">
+      <img class="m-wide" src="mylos/team.webp" width="1280" height="800" alt="Two people in Mylo's aprons behind the gelato counter, lifting the lids off the pans">
+      <figcaption class="cap">Behind the counter at Mylo's.</figcaption>
+    </figure>
+    <dl class="m-facts">
+      <div><dt>Opened</dt><dd>September 2021</dd></div>
+      <div><dt>Where</dt><dd>Gardens by the Bay</dd></div>
+      <div><dt>Flavours at launch</dt><dd>23</dd></div>
+      <div><dt>Non-dairy</dt><dd>6</dd></div>
+      <div><dt>With alcohol</dt><dd>2</dd></div>
+      <div><dt>Dogs</dt><dd>Welcome</dd></div>
+    </dl>
+
+    <div class="m-two">
+      <div>
+        <span class="mono m-eye">The brief</span>
+        <h4>A café turning into a gelato shop</h4>
+        <p>Mylo's took over a glasshouse on the Waterfront Promenade, a few minutes from the Flower Dome and Cloud Forest. The gelato counter was growing from 8 flavours to 23.</p>
+        <p>The people walking past are not out shopping for dessert. They are running, cycling, pushing prams and walking dogs. The menu had to give each of them a reason to stop.</p>
+      </div>
+      <figure class="m-fig"><img src="mylos/counter.webp" width="820" height="600" loading="lazy" alt="The Mylo's counter with its teal tiles, pink neon sign and covered gelato pans"><figcaption class="cap">The counter, with the gelato made behind it.</figcaption></figure>
+    </div>
+
+    <div class="m-chef">
+      <span class="mono m-eye">Working with Chef Michael Wilson</span>
+      <p class="m-say">One of my favourite people. He respects every ingredient, and he taught me flavour pairing and integrity as a creator.</p>
+    </div>
+
+    <div class="m-block">
+      <span class="mono m-eye">The gelato</span>
+      <h4>Things people already love, rebuilt as gelato</h4>
+      <ul class="m-range">
+        <li><b>Desserts</b><span>Apple Pie, Strawberry Tart and Banoffee, each with its sauce rippled through and its crumb folded in.</span></li>
+        <li><b>Drinks</b><span>Margarita and Gin Tonic. Alcohol lowers the freezing point far more than sugar does, so these are balanced differently to stay scoopable.</span></li>
+        <li><b>Without milk</b><span>Alphonso Mango, Lemon, Jasmine Oolong, Coconut Pandan, Lychee Raspberry Rose, and Pineapple Sichuan Pepper.</span></li>
+        <li><b>For dogs</b><span>Biscuits in pumpkin and oat or peanut butter, and popsicles in bone broth or yoghurt and fruit.</span></li>
+      </ul>
+      <div class="m-pans">
+        <figure><img src="mylos/pan-strawberry.webp" width="720" height="900" loading="lazy" alt="A pan of white gelato with a red strawberry ripple"><figcaption class="cap">Strawberry ripple.</figcaption></figure>
+        <figure><img src="mylos/pan-crumble.webp" width="720" height="900" loading="lazy" alt="A pan of pale gelato with caramel pools and biscuit crumb"><figcaption class="cap">Biscuit crumb and caramel.</figcaption></figure>
+        <figure><img src="mylos/pan-chocolate.webp" width="720" height="900" loading="lazy" alt="A pan of chocolate gelato with caramel and chopped peanuts"><figcaption class="cap">Chocolate, caramel and peanuts.</figcaption></figure>
+        <figure><img src="mylos/pan-pistachio.webp" width="720" height="900" loading="lazy" alt="A pan of gelato topped with pistachio, hazelnut and shards of pastry"><figcaption class="cap">Pistachio, hazelnut and pastry.</figcaption></figure>
+      </div>
+      <p><a class="m-link" href="science.html#gelato">The science behind keeping it scoopable</a></p>
+    </div>
+
+    <div class="m-block">
+      <span class="mono m-eye">Beyond the gelato</span>
+      <h4>The rest of the counter</h4>
+      <ul class="m-range">
+        <li><b>The waffle</b><span>The lightest waffle I know. The dough ferments overnight and is made with Trisol, a wheat fibre that keeps batter crisp. It expands to more than double in the waffle iron.</span></li>
+        <li><b>Bagels</b><span>Smoked salmon and beef pastrami, both crowd favourites.</span></li>
+        <li><b>Paninis</b><span>Ham and cheese, tuna melt, and tomato and mozzarella.</span></li>
+        <li><b>Bakes</b><span>Freshly baked pastries, brownies and donuts.</span></li>
+      </ul>
+    </div>
+
+    <div class="m-block">
+      <span class="mono m-eye">The room</span>
+      <div class="m-room">
+        <figure><img src="mylos/glasshouse.webp" width="1000" height="660" loading="lazy" alt="The glass-walled dining room with a long wooden table, yellow cushions and trees outside"><figcaption class="cap">Glass on three sides.</figcaption></figure>
+        <figure><img src="mylos/ingredients.webp" width="1000" height="660" loading="lazy" alt="Mango, passion fruit, melon, pandan leaves, pineapple, lime, chocolate and a waffle cone laid out on a grey surface"><figcaption class="cap">What goes in.</figcaption></figure>
+        <figure><img src="mylos/tasting.webp" width="640" height="424" loading="lazy" alt="Two people in Mylo's aprons laughing as one holds a cone up to the other's face"><figcaption class="cap">Quality control.</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="m-camp">
+      <span class="mono m-eye">The campaign · my concept, not an official Mylo's campaign</span>
+      <p class="m-line">Everyone gets a treat.</p>
+      <p>Nobody comes to Gardens by the Bay for gelato. They come to run, to walk the dog, to tire out the children. So the ads do not sell gelato. They name who has earned a treat, and the answer is everybody, including the dog and the friend who cannot have milk.</p>
+      <figure class="m-ad wide top">
+        <img src="mylos/dog-banner.webp" width="1200" height="675" loading="lazy" alt="A golden retriever looking up at a hand holding a dog biscuit">
+        <figcaption><p>Everyone gets a treat.</p><span class="mono">He walked you here. He gets one too.</span></figcaption>
+      </figure>
+      <div class="m-ads">
+        <figure class="m-ad"><img src="mylos/glasshouse-tall.webp" width="720" height="900" loading="lazy" alt=""><figcaption><p>For the one who only came for the view.</p><span class="mono">Glass on three sides</span></figcaption></figure>
+        <figure class="m-ad"><img src="mylos/pan-strawberry.webp" width="720" height="900" loading="lazy" alt=""><figcaption><p>For the one who couldn't choose between tart and gelato.</p><span class="mono">Strawberry Tart</span></figcaption></figure>
+        <figure class="m-ad type"><figcaption><span class="mono">Gin Tonic · Margarita</span></figcaption><figcaption><p>For the one who wanted a drink.</p><span class="mono">By the scoop</span></figcaption></figure>
+        <figure class="m-ad"><img src="mylos/ingredients-tall.webp" width="720" height="900" loading="lazy" alt=""><figcaption><p>No milk. Still gets a treat.</p><span class="mono">Six non-dairy flavours</span></figcaption></figure>
+        <figure class="m-ad"><img src="mylos/pan-chocolate.webp" width="720" height="900" loading="lazy" alt=""><figcaption><p>For the one who said "just a small one".</p><span class="mono">Double scoop</span></figcaption></figure>
+        <figure class="m-ad type dark"><figcaption><span class="mono">Waterfront Promenade</span></figcaption><figcaption><p>You ran five kilometres. You know why you're here.</p><span class="mono">Gelato at the finish line</span></figcaption></figure>
+        <figure class="m-ad type"><figcaption><span class="mono">The waffle</span></figcaption><figcaption><p>Fermented overnight. Gone in a minute.</p><span class="mono">Doubles in the iron</span></figcaption></figure>
+        <figure class="m-ad type dark"><figcaption><span class="mono">Smoked salmon · Beef pastrami</span></figcaption><figcaption><p>For the one without a sweet tooth.</p><span class="mono">Bagels and paninis</span></figcaption></figure>
+      </div>
+      <div class="m-notes">
+        <div><p class="label">Why it works</p><p>A treat is easier to say yes to than a dessert. It is something you have earned, so the run, the walk or the long week does the selling.</p></div>
+        <div><p class="label">Where it would run</p><p>Signs along the promenade facing runners and dog walkers, the counter itself, and Instagram.</p></div>
+      </div>
+    </div>
+
+    <div class="m-end">
+      <div><h4>Launching something?</h4><p>I develop the menu, and I think about why a stranger would stop for it.</p></div>
+      <a class="btn solid" href="#contact" data-close>Tell me what you're making</a>
+    </div>
   </div>
 </dialog>
 
@@ -586,7 +740,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
   // ---------- consulting case cards ----------
   // Fill these in. null shows "To add". photos: image paths, e.g. "images/mylos-1.jpg".
   var CASES = [
-    {tag:"Gelato shop launch", name:"Mylo's", facts:[["Brand","Mylo's"],["Shop","Gelato shop"],["Project","Launch R&D"]], photos:[], brief:null, did:null, result:null},
+    {tag:"Gelato shop launch", name:"Mylo's", rich:"mylos", facts:[["Brand","Mylo's"],["Shop","Gelato shop"],["Project","Launch R&D"]], photos:[], brief:null, did:null, result:null},
     {tag:"Client project", name:"Kee Corner", facts:[["Brand","Kee Corner"],["Shop",null],["Project",null]], photos:[], brief:null, did:null, result:null},
     {tag:"Product development", name:"Vegan cakes and desserts", facts:[["Brand",null],["Product","Vegan cakes and desserts"],["Project",null]], photos:[], brief:null, did:null, result:null},
     {tag:"Product development", name:"Soft serve premix", facts:[["Brand",null],["Product","Soft serve premix"],["Project",null]], photos:[], brief:null, did:null, result:null},
@@ -623,7 +777,12 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
     return dlg.animate(back ? [big, small] : [small, big], {duration: back ? 260 : 400, easing:"cubic-bezier(.2,.8,.2,1)"});
   }
   function openCase(card){
-    fillCase(CASES[Number(card.getAttribute("data-case"))]);
+    var chosen = CASES[Number(card.getAttribute("data-case"))];
+    Array.prototype.forEach.call(dlg.querySelectorAll(".rich"), function(r){ r.hidden = true });
+    var rich = chosen.rich ? $("rich-"+chosen.rich) : null;
+    $("dlgPlain").hidden = !!rich;
+    if (rich){ rich.hidden = false; dlg.setAttribute("aria-labelledby", chosen.rich+"Name"); }
+    else { dlg.setAttribute("aria-labelledby", "dlgName"); fillCase(chosen); }
     fromCard = card; closing = false;
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
     document.body.style.overflow = "hidden"; dlg.scrollTop = 0;
@@ -643,6 +802,9 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
   var caseEls = Array.prototype.slice.call(document.querySelectorAll(".case"));
   caseEls.forEach(function(el){ el.addEventListener("click", function(){ openCase(el) }) });
   $("dlgClose").addEventListener("click", closeCase);
+  Array.prototype.forEach.call(dlg.querySelectorAll("[data-close]"), function(a){
+    a.addEventListener("click", function(){ if (dlg.close) dlg.close(); else dlg.removeAttribute("open"); document.body.style.overflow = ""; closing = false; });
+  });
   dlg.addEventListener("cancel", function(e){ e.preventDefault(); closeCase() });
   dlg.addEventListener("click", function(e){ if (e.target === dlg) closeCase() });
   if (window.IntersectionObserver && caseEls.length && !calm){

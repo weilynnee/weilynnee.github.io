@@ -30,7 +30,7 @@
 html,body{margin:0}
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55;-webkit-font-smoothing:antialiased}
-.wrap{width:100%;max-width:1160px;margin-inline:auto;
+.wrap{width:100%;max-width:1600px;margin-inline:auto;
   padding-left:max(clamp(16px,4vw,40px),env(safe-area-inset-left,0px));
   padding-right:max(clamp(16px,4vw,40px),env(safe-area-inset-right,0px))}
 a{color:inherit}
@@ -61,25 +61,24 @@ h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--mark) 6
 .flame img{position:relative;display:block;width:100%;height:auto;transform-origin:50% 95%;transition:transform .7s ease}
 .flame:hover img{transform:scale(1.07) rotate(-3deg)}
 
-/* wheel */
-.wheel{display:flex;flex-direction:column;gap:.75rem}
-.stage{--cw:clamp(150px,20vw,210px);--ch:214px;position:relative;height:280px;perspective:1500px;overflow:hidden;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
-.stage.dragging{cursor:grabbing}
-.ring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
-.stage.dragging .ring{transition:none}
-.card{position:absolute;left:calc(var(--cw) / -2);top:calc(var(--ch) / -2);width:var(--cw);height:var(--ch);backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  display:flex;flex-direction:column;gap:.5rem;text-align:left;padding:.9rem .9rem 1rem;font:inherit;color:var(--ink);cursor:pointer;
-  background:var(--surface);border:1.5px solid var(--line);border-top:6px solid var(--line);border-radius:14px}
-.card[aria-pressed="true"]{border-color:var(--ink);border-top-color:var(--accent)}
-.card .mono{color:var(--berry);font-size:.6875rem}
-.card b{font-family:var(--display);font-weight:700;font-size:1.25rem;line-height:1.08;letter-spacing:-0.01em;text-wrap:balance}
-.card i{font-family:var(--mono);font-style:normal;font-size:.75rem;color:var(--muted);margin-top:auto;overflow-wrap:anywhere}
-.bar{display:flex;align-items:center;justify-content:center;gap:1rem}
+/* topic tiles: every topic visible at once, each marked with its key quantity */
+.index{display:flex;flex-direction:column;gap:.9rem}
+.index .hint{color:var(--muted)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,10.5rem),1fr));gap:.9rem}
+.tile{display:flex;flex-direction:column;gap:.35rem;text-align:left;min-height:11.5rem;padding:.9rem;font:inherit;color:var(--ink);cursor:zoom-in;min-width:0;
+  background:var(--surface);border:1.5px solid var(--line);border-top:6px solid var(--accent);border-radius:14px;transition:transform .2s ease,border-color .2s ease}
+.tile:hover{transform:translateY(-3px);border-color:var(--ink);border-top-color:var(--accent)}
+.tile .sym{font-family:var(--display);font-weight:800;font-size:clamp(2rem,4vw,2.7rem);line-height:1;letter-spacing:-0.03em}
+.tile b{font-family:var(--display);font-weight:700;font-size:1.08rem;line-height:1.1;margin-top:auto;text-wrap:balance}
+.tile .mono{color:var(--berry);font-size:.6875rem}
+dialog.tdlg{border:0;padding:0;background:var(--surface);color:var(--ink);border-radius:18px;border-top:6px solid var(--accent);width:min(72rem,calc(100% - 32px));max-height:calc(100% - 48px);overflow:auto}
+dialog.tdlg::backdrop{background:rgba(16,22,40,.62)}
+.dlg-x{position:sticky;top:0;z-index:5;height:0;display:flex;justify-content:flex-end}
+.dlg-x .round{flex:none;margin:.75rem .75rem 0 0;background:var(--surface);font-size:1.4rem;box-shadow:0 0 0 4px var(--surface)}
 .round{width:2.75rem;height:2.75rem;border-radius:50%;border:2px solid var(--ink);background:transparent;color:var(--ink);font-size:1.2rem;cursor:pointer;line-height:1}
 .round:hover{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.now{min-width:12rem;text-align:center}
-.now b{display:block;font-family:var(--display);font-size:1.15rem}
-.hint{text-align:center;color:var(--muted)}
+.tdlg .topic{border:0;border-radius:0;background:transparent}
+.tdlg .topic-head{padding-right:3.5rem}
 
 /* topic page */
 .topic{display:flex;flex-direction:column;gap:1.5rem;background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--accent);border-radius:18px;padding:clamp(1.1rem,3.5vw,2.25rem)}
@@ -124,7 +123,7 @@ td{color:var(--ink)}
 footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);color:var(--muted);font-size:.875rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between}
 @media (max-width:820px){.cols{grid-template-columns:minmax(0,1fr)} .stages li{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:760px){.flame{align-self:start}}
-@media (prefers-reduced-motion:reduce){.ring,.flame img{transition:none} .flame:hover img{transform:none}}
+@media (prefers-reduced-motion:reduce){.tile,.flame img{transition:none} .tile:hover{transform:none} .flame:hover img{transform:none}}
 </style>
 </head>
 <body>
@@ -150,20 +149,17 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
   </div>
 
   <div class="wrap">
-    <section class="wheel" aria-label="Topics">
-      <div class="stage" id="stage"><div class="ring" id="ring"></div></div>
-      <div class="bar">
-        <button class="round" id="prev" type="button" aria-label="Previous topic">&#8592;</button>
-        <div class="now" aria-live="polite"><b id="nowName">Where the heat goes</b><span class="mono" id="nowCount">1 / 13</span></div>
-        <button class="round" id="next" type="button" aria-label="Next topic">&#8594;</button>
-      </div>
-      <p class="hint mono">Drag to spin · click a card to open it below</p>
+    <section class="index" aria-label="Topics">
+      <p class="hint mono">Thirteen topics · tap one to open it</p>
+      <div class="tiles" id="tiles"></div>
     </section>
   </div>
 
-  <div class="wrap" id="pages">
+  <dialog class="tdlg" id="topicDlg" aria-label="Topic">
+    <div class="dlg-x"><button class="round" id="topicClose" type="button" aria-label="Close">&times;</button></div>
+  <div id="pages">
 
-    <section class="topic" id="topic-heat" data-cat="Heat" data-card="Where the heat goes" data-eq="Q = m × cp × ΔT">
+    <section class="topic" id="topic-heat" data-sym="Q" data-cat="Heat" data-card="Where the heat goes" data-eq="Q = m × cp × ΔT">
       <div class="topic-head">
         <span class="mono eyebrow">Heat</span>
         <h2>Heat is never lost, only moved</h2>
@@ -199,7 +195,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-egg" data-cat="Proteins" data-card="The perfect egg" data-eq="a temperature, not a time" hidden>
+    <section class="topic" id="topic-egg" data-sym="63°" data-cat="Proteins" data-card="The perfect egg" data-eq="a temperature, not a time" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Proteins</span>
         <h2>The perfect egg is a temperature, not a time</h2>
@@ -239,7 +235,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-steak" data-cat="Diffusion" data-card="The random-walk steak" data-eq="L = √(4 × D × t)" hidden>
+    <section class="topic" id="topic-steak" data-sym="√t" data-cat="Diffusion" data-card="The random-walk steak" data-eq="L = √(4 × D × t)" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Diffusion</span>
         <h2>A steak cooks one random step at a time</h2>
@@ -271,7 +267,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-acid" data-cat="Proteins" data-card="Cooking without fire" data-eq="pH = −log [H⁺]" hidden>
+    <section class="topic" id="topic-acid" data-sym="pH" data-cat="Proteins" data-card="Cooking without fire" data-eq="pH = −log [H⁺]" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Proteins</span>
         <h2>Acid cooks without heat</h2>
@@ -303,7 +299,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-clear" data-cat="Proteins" data-card="The clear protein shake" data-eq="scattering ∝ d⁶" hidden>
+    <section class="topic" id="topic-clear" data-sym="d⁶" data-cat="Proteins" data-card="The clear protein shake" data-eq="scattering ∝ d⁶" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Proteins</span>
         <h2>Why a protein shake can be clear</h2>
@@ -347,7 +343,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-candy" data-cat="Sugar" data-card="The candy thermometer" data-eq="hotter syrup = less water" hidden>
+    <section class="topic" id="topic-candy" data-sym="115°" data-cat="Sugar" data-card="The candy thermometer" data-eq="hotter syrup = less water" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Sugar</span>
         <h2>A candy thermometer measures water</h2>
@@ -384,7 +380,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-gelato" data-cat="Sugar" data-card="Gelato" data-eq="ΔT = K × m × i" hidden>
+    <section class="topic" id="topic-gelato" data-sym="ΔT" data-cat="Sugar" data-card="Gelato" data-eq="ΔT = K × m × i" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Sugar</span>
         <h2>Same weight of sugar, different gelato</h2>
@@ -435,7 +431,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-firm" data-cat="Texture" data-card="Why food pushes back" data-eq="E = k × T ÷ l³" hidden>
+    <section class="topic" id="topic-firm" data-sym="E" data-cat="Texture" data-card="Why food pushes back" data-eq="E = k × T ÷ l³" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Texture</span>
         <h2>Texture is bonds per volume</h2>
@@ -460,7 +456,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-thick" data-cat="Texture" data-card="Thickeners" data-eq="longer chains, thicker liquid" hidden>
+    <section class="topic" id="topic-thick" data-sym="η" data-cat="Texture" data-card="Thickeners" data-eq="longer chains, thicker liquid" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Texture</span>
         <h2>Long molecules thicken</h2>
@@ -477,7 +473,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-emulsion" data-cat="Mixtures" data-card="Making enemies mix" data-eq="droplets over 64% → solid-like" hidden>
+    <section class="topic" id="topic-emulsion" data-sym="64%" data-cat="Mixtures" data-card="Making enemies mix" data-eq="droplets over 64% → solid-like" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Mixtures</span>
         <h2>Oil and water need a go-between</h2>
@@ -498,7 +494,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-brown" data-cat="Flavour" data-card="The flavour of brown" data-eq="amino acids + sugars → flavour" hidden>
+    <section class="topic" id="topic-brown" data-sym="140°" data-cat="Flavour" data-card="The flavour of brown" data-eq="amino acids + sugars → flavour" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Flavour</span>
         <h2>Browning needs a dry surface</h2>
@@ -519,7 +515,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-water" data-cat="Shelf life" data-card="The water that counts" data-eq="aw = p ÷ p₀" hidden>
+    <section class="topic" id="topic-water" data-sym="aw" data-cat="Shelf life" data-card="The water that counts" data-eq="aw = p ÷ p₀" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Shelf life</span>
         <h2>Available water decides shelf life</h2>
@@ -551,7 +547,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-ferment" data-cat="Microbes" data-card="Letting microbes cook" data-eq="sugar → acid, alcohol, gas" hidden>
+    <section class="topic" id="topic-ferment" data-sym="CO₂" data-cat="Microbes" data-card="Letting microbes cook" data-eq="sugar → acid, alcohol, gas" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Microbes</span>
         <h2>Microbes and enzymes cook too</h2>
@@ -581,6 +577,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
     </section>
 
   </div>
+  </dialog>
 </main>
 
 <footer><div class="wrap"><span>Edible Alchemy by Lynn · Food science notebook</span><span>Working notes, in my own words.</span></div></footer>
@@ -593,54 +590,49 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
   var calm = false;
   try { calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches } catch(e){}
 
-  // ---------- wheel of topic cards ----------
+  // ---------- topic tiles and the pop-up they open ----------
   var topics = Array.prototype.slice.call(document.querySelectorAll(".topic"));
-  var N = topics.length, STEP = 360/N, stage = $("stage"), ring = $("ring"), cards = [];
-  var idx = 0, angle = 0, R = 380, dragging = false, moved = 0, lastX = 0, onShow = {};
+  var dlg = $("topicDlg"), grid = $("tiles"), tiles = [], openId = null, fromTile = null, closing = false, onShow = {};
   topics.forEach(function(t,i){
-    var b = document.createElement("button"); b.type = "button"; b.className = "card"; b.id = "card-"+t.id.slice(6);
-    var c = document.createElement("span"), n = document.createElement("b"), q = document.createElement("i");
-    c.className = "mono"; c.textContent = t.getAttribute("data-cat"); n.textContent = t.getAttribute("data-card"); q.textContent = t.getAttribute("data-eq");
-    b.appendChild(c); b.appendChild(n); b.appendChild(q);
-    b.addEventListener("click", function(){ if (moved < 6) select(i, true) });
-    ring.appendChild(b); cards.push(b);
+    var b = document.createElement("button"); b.type = "button"; b.className = "tile"; b.id = "tile-"+t.id.slice(6);
+    var y = document.createElement("span"), n = document.createElement("b"), c = document.createElement("span");
+    y.className = "sym"; y.textContent = t.getAttribute("data-sym"); n.textContent = t.getAttribute("data-card"); c.className = "mono"; c.textContent = t.getAttribute("data-cat");
+    b.appendChild(y); b.appendChild(n); b.appendChild(c);
+    b.addEventListener("click", function(){ openTopic(i, b, false) });
+    grid.appendChild(b); tiles.push(b);
   });
-  function place(){
-    var cw = cards[0].offsetWidth || 180;
-    R = Math.round(cw/2/Math.tan(Math.PI/N)) + 26;
-    cards.forEach(function(b,i){ b.style.transform = "rotateY("+(i*STEP)+"deg) translateZ("+R+"px)" });
-    turn();
+  function zoom(card, back){
+    if (calm || !dlg.animate || !card) return null;
+    var a = card.getBoundingClientRect(), b = dlg.getBoundingClientRect();
+    if (!b.width || !b.height) return null;
+    var small = {transform:"translate("+(a.left-b.left)+"px,"+(a.top-b.top)+"px) scale("+(a.width/b.width)+","+(a.height/b.height)+")", transformOrigin:"top left", opacity:0.3};
+    var big = {transform:"none", transformOrigin:"top left", opacity:1};
+    return dlg.animate(back ? [big, small] : [small, big], {duration: back ? 260 : 400, easing:"cubic-bezier(.2,.8,.2,1)"});
   }
-  function turn(){ ring.style.transform = "translateZ(-"+R+"px) rotateY("+angle+"deg)" }
-  function select(i, byUser){
-    idx = mod(i, N);
-    var want = -idx*STEP; angle = want + 360*Math.round((angle - want)/360); turn();
-    topics.forEach(function(t,k){ t.hidden = k !== idx; cards[k].setAttribute("aria-pressed", k === idx ? "true" : "false") });
-    $("nowName").textContent = topics[idx].getAttribute("data-card"); $("nowCount").textContent = (idx+1)+" / "+N;
-    var key = topics[idx].id.slice(6);
-    if (onShow[key]) onShow[key]();
-    if (byUser){ try { history.replaceState(null, "", "#"+key) } catch(e){} }
+  function openTopic(i, tile, quiet){
+    topics.forEach(function(t,k){ t.hidden = k !== i });
+    openId = topics[i].id.slice(6); fromTile = tile; closing = false;
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+    document.body.style.overflow = "hidden"; dlg.scrollTop = 0;
+    zoom(tile, false);
+    if (onShow[openId]) onShow[openId]();
+    if (!quiet){ try { history.replaceState(null, "", "#"+openId) } catch(e){} }
+    $("topicClose").focus();
   }
-  stage.addEventListener("pointerdown", function(e){ dragging = true; moved = 0; lastX = e.clientX; });
-  window.addEventListener("pointermove", function(e){
-    if (!dragging) return;
-    var dx = e.clientX - lastX; lastX = e.clientX; moved += Math.abs(dx);
-    if (moved >= 6){ stage.classList.add("dragging"); angle += dx*0.28; turn(); }
-  });
-  function drop(){
-    if (!dragging) return;
-    dragging = false; stage.classList.remove("dragging");
-    if (moved >= 6) select(Math.round(-angle/STEP), true);
-    setTimeout(function(){ moved = 0 }, 0);
+  function closeTopic(){
+    if (closing) return; closing = true;
+    function end(){
+      if (dlg.close) dlg.close(); else dlg.removeAttribute("open");
+      document.body.style.overflow = ""; closing = false; openId = null;
+      try { history.replaceState(null, "", location.pathname) } catch(e){}
+      if (fromTile) fromTile.focus();
+    }
+    var an = zoom(fromTile, true);
+    if (an) an.onfinish = end; else end();
   }
-  window.addEventListener("pointerup", drop); window.addEventListener("pointercancel", drop);
-  $("prev").addEventListener("click", function(){ select(idx-1, true) });
-  $("next").addEventListener("click", function(){ select(idx+1, true) });
-  stage.addEventListener("keydown", function(e){
-    if (e.key === "ArrowLeft"){ select(idx-1, true); cards[idx].focus(); e.preventDefault() }
-    if (e.key === "ArrowRight"){ select(idx+1, true); cards[idx].focus(); e.preventDefault() }
-  });
-  window.addEventListener("resize", place);
+  $("topicClose").addEventListener("click", closeTopic);
+  dlg.addEventListener("cancel", function(e){ e.preventDefault(); closeTopic() });
+  dlg.addEventListener("click", function(e){ if (e.target === dlg) closeTopic() });
 
   // ---------- heat balance ----------
   var hW = $("hWater"), hE = $("hEggs"), hS = $("hStart");
@@ -756,7 +748,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
   }
   function loop(){
     requestAnimationFrame(loop);
-    if (document.hidden || steps >= MAX || topics[idx].id !== "topic-steak") return;
+    if (document.hidden || steps >= MAX || openId !== "steak") return;
     for (var k=0;k<3;k++) walkStep();
     draw();
   }
@@ -768,13 +760,9 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
   new MutationObserver(function(){ tint(); draw() }).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
   if (!calm) requestAnimationFrame(loop);
 
-  // ---------- start ----------
-  place();
-  var first = 0, want = (location.hash || "").slice(1);
-  topics.forEach(function(t,i){ if (t.id === "topic-"+want) first = i });
-  ring.style.transition = "none"; select(first, false);
-  requestAnimationFrame(function(){ ring.style.transition = "" });
-  try { document.fonts.ready.then(place) } catch(e){}
+  // ---------- start: a link such as science.html#gelato opens that topic ----------
+  var want = (location.hash || "").slice(1);
+  topics.forEach(function(t,i){ if (t.id === "topic-"+want) openTopic(i, tiles[i], true) });
 })();
 </script>
 </body>
