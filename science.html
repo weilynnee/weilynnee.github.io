@@ -139,7 +139,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <div class="hero-copy">
         <span class="mono eyebrow">Food science notebook</span>
         <h1>The notebook I'd rescue from a <em>fire</em>.</h1>
-        <p class="lede">I have almost burnt the kitchen down more than once. These are the notes that came out of it, and I add to them as I test things.</p>
+        <p class="lede">I have almost burnt the kitchen down more than once.</p>
       </div>
       <figure class="flame">
         <img src="flame-mark.webp" width="310" height="420" alt="Flames from a pan fire in my kitchen">
@@ -149,7 +149,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
 
   <div class="wrap">
     <section class="index" aria-label="Topics">
-      <p class="hint mono">Thirteen topics · tap one to open it</p>
+      <p class="hint mono">Sixteen topics · tap one to open it</p>
       <div class="tiles" id="tiles"></div>
     </section>
   </div>
@@ -190,6 +190,40 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
         <div class="block"><h3>Why crowding the pan fails</h3><p>Every piece of cold food draws heat out of the pan or pot. Add too much at once and the temperature falls below where searing or boiling happens, so the food stews until the burner catches up.</p></div>
         <div class="block"><h3>The hidden heat in steam</h3><p>Turning one gram of boiling water into steam takes about 2,260 joules without raising the temperature at all. That is over five times the energy needed to bring it from fridge-cold to boiling. Steam gives all of it back when it condenses on your hand, so it burns worse than boiling water.</p></div>
         <div class="block"><h3>Why wet food sticks at 100 °C</h3><p>As long as water is boiling off a surface, the heat goes into evaporation and the temperature cannot climb past 100 °C. Nothing fries or browns until that water is gone.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-calories" data-cat="Energy" data-card="Calories" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Energy</span>
+        <h2>A calorie is heat you can eat</h2>
+        <p>A food Calorie is a unit of energy: the heat needed to warm one kilogram of water by one degree Celsius. A label counts how much heat a food would give off if it were burned.</p>
+      </div>
+      <div class="cols">
+        <div>
+          <span class="eq">1 Calorie (kcal) = 4,184 joules</span>
+          <p>Each gram of fat carries about 9 Calories. Carbohydrate and protein carry about 4 each, and alcohol about 7. Add them up and you have the number on the label.</p>
+          <span class="eq">Calories = 9 × fat + 4 × carbs + 4 × protein</span>
+          <p>The same heat equation from the first topic turns that energy into something you can picture: how much water it could boil.</p>
+        </div>
+        <div class="tool">
+          <p class="small">Start: roughly a cheeseburger.</p>
+          <label for="calFat">Fat: <span id="calFatVal">30 g</span></label>
+          <input type="range" id="calFat" min="0" max="60" step="1" value="30">
+          <label for="calCarb">Carbohydrate: <span id="calCarbVal">40 g</span></label>
+          <input type="range" id="calCarb" min="0" max="100" step="1" value="40">
+          <label for="calPro">Protein: <span id="calProVal">25 g</span></label>
+          <input type="range" id="calPro" min="0" max="60" step="1" value="25">
+          <div><span class="big" id="calOut">530 Calories</span><span class="small" id="calNote"></span></div>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>How calories are measured</h3><p>Burn a sample of food in a sealed chamber sitting in water, and measure how much the water warms. The mass of water times its temperature rise gives the energy. It is the heat equation run backwards.</p></div>
+        <div class="block"><h3>Why fat carries more</h3><p>Fat is almost all carbon and hydrogen, with very little oxygen, so there is more left to burn in every gram. Carbohydrate already contains a lot of oxygen, which makes it partly burned before you start.</p></div>
+        <div class="block"><h3>The label is an estimate</h3><p>The 9, 4 and 4 are averages. Fibre gives less, and the body does not extract everything: whole nuts deliver noticeably less than their label says, and cooking makes more of a food's energy available.</p></div>
+        <div class="block"><h3>Your body is not a furnace</h3><p>Most of the energy you eat goes on staying alive and warm. Muscles turn only about a quarter of the energy they use into movement. The rest leaves as heat, which is why exercise makes you hot.</p></div>
+        <div class="block"><h3>Calorie and calorie</h3><p>A small calorie warms one gram of water by one degree. The Calorie on a food label is a thousand of those, also written kcal.</p></div>
       </div>
       <p class="mine">My notes: to add.</p>
     </section>
@@ -430,7 +464,42 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-firm" data-sym="E" data-cat="Texture" data-card="Why food pushes back" data-eq="E = k × T ÷ l³" hidden>
+    <section class="topic" id="topic-baking" data-cat="Gas" data-card="Baking soda and vinegar" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Gas</span>
+        <h2>How much gas is in a teaspoon of baking soda</h2>
+        <p>Baking soda meets an acid and makes carbon dioxide. The recipe is a chemical equation, so you can count the gas before you bake.</p>
+      </div>
+      <div class="cols">
+        <div>
+          <span class="eq">NaHCO₃ + CH₃COOH → CO₂ + H₂O + CH₃COONa</span>
+          <p>One unit of baking soda and one of the acid in vinegar give one unit of carbon dioxide. 84 g of baking soda is one mole, so every 84 g makes one mole of gas.</p>
+          <span class="eq">P × V = n × R × T</span>
+          <p>The gas law turns moles (<b>n</b>) into volume (<b>V</b>) at a given temperature (<b>T</b>) and pressure (<b>P</b>). One mole fills about 24.5 litres at room temperature. Heat it and it expands in step with its absolute temperature.</p>
+          <p><b>Assumption:</b> all the baking soda reacts and none of the gas escapes.</p>
+        </div>
+        <div class="tool">
+          <label for="bakeG">Baking soda: <span id="bakeGVal">5 g</span></label>
+          <input type="range" id="bakeG" min="1" max="15" step="0.5" value="5">
+          <label for="bakeT">Oven temperature: <span id="bakeTVal">180 °C</span></label>
+          <input type="range" id="bakeT" min="150" max="230" step="5" value="180">
+          <div><span class="big" id="bakeOut">1.46 litres</span><span class="small">of carbon dioxide at room temperature</span></div>
+          <div><span class="big" id="bakeHot">2.21 litres</span><span class="small" id="bakeHotNote">once it reaches oven temperature</span></div>
+          <p class="small" id="bakeNote"></p>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Why the cake does not triple</h3><p>Most of the gas escapes before the crumb sets. A bubble only counts if egg, gluten or starch firms up around it in time, so the real rise is a fraction of the number above.</p></div>
+        <div class="block"><h3>Soda needs an acid</h3><p>With no acid, heat alone breaks baking soda down. It gives only half the gas and leaves a soapy, metallic taste. Buttermilk, yoghurt, honey, brown sugar, natural cocoa and lemon all do the acid's job.</p></div>
+        <div class="block"><h3>Baking powder brings its own</h3><p>Baking powder is baking soda with a dry acid already mixed in. Double-acting powders hold two acids: one works when the batter is wet and the other when it gets hot.</p></div>
+        <div class="block"><h3>Too much is worse than too little</h3><p>Baking soda that finds no acid stays in the cake. It tastes soapy, turns the crumb yellow and speeds up browning.</p></div>
+        <div class="block"><h3>Steam and air lift too</h3><p>Water turning to steam expands about 1,600 times, which is what puffs choux and puff pastry. Air whipped into eggs grows by about half between room temperature and a hot oven.</p></div>
+        <div class="block"><h3>The clock starts when it gets wet</h3><p>The reaction begins as soon as soda and acid meet in liquid. A batter left on the counter is losing its gas, so it should go into the oven soon after mixing.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-firm" data-sym="E" data-cat="Texture" data-card="Texture &amp; Hardness" data-eq="E = k × T ÷ l³" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Texture</span>
         <h2>Texture is bonds per volume</h2>
@@ -472,7 +541,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-emulsion" data-sym="64%" data-cat="Mixtures" data-card="Making enemies mix" data-eq="droplets over 64% → solid-like" hidden>
+    <section class="topic" id="topic-emulsion" data-sym="64%" data-cat="Mixtures" data-card="Emulsion" data-eq="droplets over 64% → solid-like" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Mixtures</span>
         <h2>Oil and water need a go-between</h2>
@@ -493,7 +562,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-brown" data-sym="140°" data-cat="Flavour" data-card="The flavour of brown" data-eq="amino acids + sugars → flavour" hidden>
+    <section class="topic" id="topic-brown" data-sym="140°" data-cat="Flavour" data-card="Browning" data-eq="amino acids + sugars → flavour" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Flavour</span>
         <h2>Browning needs a dry surface</h2>
@@ -514,7 +583,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-water" data-sym="aw" data-cat="Shelf life" data-card="The water that counts" data-eq="aw = p ÷ p₀" hidden>
+    <section class="topic" id="topic-water" data-sym="aw" data-cat="Shelf life" data-card="Water activity" data-eq="aw = p ÷ p₀" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Shelf life</span>
         <h2>Available water decides shelf life</h2>
@@ -546,7 +615,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <p class="mine">My notes: to add.</p>
     </section>
 
-    <section class="topic" id="topic-ferment" data-sym="CO₂" data-cat="Microbes" data-card="Letting microbes cook" data-eq="sugar → acid, alcohol, gas" hidden>
+    <section class="topic" id="topic-ferment" data-sym="CO₂" data-cat="Microbes" data-card="Fermentation" data-eq="sugar → acid, alcohol, gas" hidden>
       <div class="topic-head">
         <span class="mono eyebrow">Microbes</span>
         <h2>Microbes and enzymes cook too</h2>
@@ -571,6 +640,51 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
         <div class="block"><h3>Yoghurt joins two topics</h3><p>Bacteria turn lactose into lactic acid. As the pH falls towards 4.6 the casein sets into a gel. It is fermentation doing the work of the acid in the protein notes.</p></div>
         <div class="block"><h3>Enzymes do the chemistry</h3><p>Enzymes are proteins that speed up one specific reaction. They work faster as it gets warmer, roughly doubling every 10 °C, until the heat unfolds them and they stop for good.</p></div>
         <div class="block"><h3>Enzymes without microbes</h3><p>Rennet cuts one milk protein and sets cheese curd with no acid. Enzymes in malt turn starch into sugar for brewing. The enzymes in fresh pineapple cut proteins, tenderising meat and ruining gelatin.</p></div>
+      </div>
+      <p class="mine">My notes: to add.</p>
+    </section>
+
+    <section class="topic" id="topic-limits" data-cat="Reality" data-card="Why formulas are never exact" hidden>
+      <div class="topic-head">
+        <span class="mono eyebrow">Reality</span>
+        <h2>Every formula is a starting point</h2>
+        <p>Each equation in this notebook assumes a tidy world: no heat lost, perfect contact, identical ingredients. A real kitchen is none of those. The formula gets you close. A thermometer, a scale and your tongue do the rest.</p>
+      </div>
+      <div class="cols">
+        <div>
+          <h3>The pan changes the answer</h3>
+          <p>Two pans on the same flame cook differently, because metals move heat at very different speeds.</p>
+          <div class="scroll">
+            <table style="min-width:24rem">
+              <thead><tr><th>Pan material</th><th>Heat conductivity<br>(W/m·K)</th><th>In the kitchen</th></tr></thead>
+              <tbody>
+                <tr><td>Copper</td><td>about 400</td><td>Responds fast, heats evenly</td></tr>
+                <tr><td>Aluminium</td><td>about 235</td><td>Quick and even, the core of most pans</td></tr>
+                <tr><td>Cast iron</td><td>about 50</td><td>Slow, with hot spots, but holds its heat</td></tr>
+                <tr><td>Carbon steel</td><td>about 45</td><td>Like cast iron, only thinner</td></tr>
+                <tr><td>Stainless steel</td><td>about 15</td><td>Poor alone, so it is wrapped around aluminium</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3>What the formulas leave out</h3>
+          <ul class="stages">
+            <li><span>Escaping heat</span><div>Some always goes to the air, the pot and the steam.</div></li>
+            <li><span>Evaporation</span><div>A wet surface is cooled by its own drying.</div></li>
+            <li><span>Shape</span><div>A real steak has edges and corners that cook faster than its middle.</div></li>
+            <li><span>Starting point</span><div>Food from the fridge and food from the counter are different problems.</div></li>
+            <li><span>The heat source</span><div>Burners vary, and ovens swing above and below the number on the dial.</div></li>
+            <li><span>Ingredients</span><div>Eggs differ in size, flour in protein, and fruit in sugar and water from batch to batch.</div></li>
+            <li><span>Altitude, weather</span><div>Water boils about 1 °C lower for every 300 m climbed, and humid air changes sugar work and drying.</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="block"><h3>Why I still use them</h3><p>A formula tells you which direction to move and roughly how far. Knowing that double the thickness means about four times the wait saves a lot of ruined steaks, even if the exact minutes are off.</p></div>
+        <div class="block"><h3>Change one thing at a time</h3><p>If two things change between batches, you cannot tell which one made the difference.</p></div>
+        <div class="block"><h3>Measure, don't guess</h3><p>A thermometer and a scale remove most of the uncertainty the formulas leave. Grams beat cups every time.</p></div>
+        <div class="block"><h3>Write it down</h3><p>The formula is general. Your notes on what happened in your pan, with your ingredients, are what make the next batch better.</p></div>
       </div>
       <p class="mine">My notes: to add.</p>
     </section>
@@ -643,6 +757,28 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
     $("hNote").textContent = (n === 1 ? "The egg takes in " : "The eggs take in ")+q.toFixed(1)+" kJ and the water cools by "+(100-tf).toFixed(1)+" °C. More water means a smaller drop, which is why a big pot keeps its boil.";
   }
   [hW,hE,hS].forEach(function(el){ el.addEventListener("input", heat) }); heat();
+
+  // ---------- calories ----------
+  var cF = $("calFat"), cC = $("calCarb"), cP = $("calPro");
+  function calories(){
+    var fat = Number(cF.value), carb = Number(cC.value), pro = Number(cP.value), kcal = 9*fat + 4*carb + 4*pro, kj = kcal*4.184;
+    $("calFatVal").textContent = fat+" g"; $("calCarbVal").textContent = carb+" g"; $("calProVal").textContent = pro+" g";
+    $("calOut").textContent = kcal.toLocaleString("en-US")+" Calories";
+    var litres = kj/(4.18*80), floors = kj*1000/(70*9.81*3/0.25);
+    $("calNote").textContent = "That is "+Math.round(kj).toLocaleString("en-US")+" kJ. Burned completely it could bring "+litres.toFixed(1)+" litres of water from 20 °C to the boil. A 70 kg person would climb roughly "+Math.round(floors/10)*10+" floors of stairs to use it up, assuming muscles are about 25% efficient.";
+  }
+  [cF,cC,cP].forEach(function(el){ el.addEventListener("input", calories) }); calories();
+
+  // ---------- baking soda and vinegar ----------
+  var bG = $("bakeG"), bT = $("bakeT");
+  function baking(){
+    var g = Number(bG.value), t = Number(bT.value), n = g/84.01, v25 = n*0.082057*298.15, vHot = n*0.082057*(t+273.15);
+    $("bakeGVal").textContent = g+" g"+(g === 5 ? " (about a teaspoon)" : ""); $("bakeTVal").textContent = t+" °C";
+    $("bakeOut").textContent = v25.toFixed(2)+" litres"; $("bakeHot").textContent = vHot.toFixed(2)+" litres";
+    $("bakeHotNote").textContent = "once it reaches "+t+" °C";
+    $("bakeNote").textContent = "It needs about "+Math.round(g*60.05/84.01/0.05)+" g of vinegar (5% acid) to react completely.";
+  }
+  [bG,bT].forEach(function(el){ el.addEventListener("input", baking) }); baking();
 
   // ---------- stage pickers (egg, candy) ----------
   function pick(listId, t){

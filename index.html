@@ -132,6 +132,10 @@ h2{font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.04;font-weight:700}
 .adcard.wide p{font-size:clamp(1.6rem,11cqw,6rem)}
 .adcard.wide .mono{margin-top:.2rem;font-size:clamp(.5625rem,1.7cqw,.9rem)}
 .camp .adcard.wide img{width:46%}
+#picks{scroll-margin-top:1.25rem}
+.quote{margin:.4rem 0 0;display:flex;flex-direction:column;gap:.5rem;border-left:4px solid var(--accent);padding-left:1rem}
+.quote p{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,2.6vw,1.8rem);line-height:1.15;letter-spacing:-0.01em;color:var(--ink);text-wrap:balance}
+.quote cite{font-style:normal;color:var(--muted)}
 /* consulting */
 .services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:2px solid var(--ink)}
 .svc{padding:1.4rem 1.4rem 1.6rem 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:.45rem;min-width:0}
@@ -302,7 +306,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
     <section class="hero">
       <div class="hero-copy">
         <h1>Half of it is chemistry. The other half is getting a stranger to <em>reach for it</em>.</h1>
-        <p class="lede">I'm Lynn, a food scientist. I develop food for my own brands, for clients, and for no reason at all. I intend to die trying new flavour pairings and food ideas. Some launched. Some never left the bench.</p>
+        <p class="lede">My name is Lynn. I studied food science and nutrition, and I have loved food and cooking for people since I was young. Why food behaves the way it does still fascinates me, and I plan to keep developing and trying new pairings until I can't. I do it for my own brands, for clients, and for no reason at all.</p>
         <div class="cta-row">
           <a class="btn solid" href="#consulting">Hire me for R&amp;D</a>
           <a class="btn" href="#work">Open the case files</a>
@@ -318,7 +322,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
           <div class="now" aria-live="polite"><b id="nowName">Jumping Fox</b><span class="mono" id="nowCount">1 / 6</span></div>
           <button class="round" id="next" type="button" aria-label="Next product">&#8594;</button>
         </div>
-        <p class="hint mono" id="hint">Drag to spin the shelf · tap a pack to open its file</p>
+        <p class="hint mono" id="hint">Drag to spin the shelf · tap a pack to jump to its file</p>
       </div>
     </section>
   </div>
@@ -328,7 +332,8 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
       <div class="sec-head">
         <span class="mono">Case files</span>
         <h2>Three brands and three products, launched or not</h2>
-        <p>Jumping Fox, Newman and Tubby Tails are brands I built. The rest are products I made and sold without a brand name. Each file shows the sensible fix, the fix I would choose instead, and the campaign. I think perception is part of the recipe, an idea I owe to Rory Sutherland.</p>
+        <p>Jumping Fox, Newman and Tubby Tails are brands I built. The rest are products I made and sold without a brand name. Each one has been my baby, and each has taught me a great deal, whether it worked or not.</p>
+        <blockquote class="quote"><p>&ldquo;The opposite of a good idea can also be a good idea.&rdquo;</p><cite class="mono">Rory Sutherland, Alchemy</cite></blockquote>
       </div>
       <div class="picks" id="picks" role="group" aria-label="Choose a venture"></div>
       <article class="file" aria-live="polite">
@@ -368,23 +373,23 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
     <section class="sec" id="consulting">
       <div class="sec-head">
         <span class="mono">Service</span>
-        <h2>R&amp;D consultation for food and drink brands</h2>
-        <p>Most brands hire an agency for the story and a factory for the product. I work on the part in between, so the product delivers what the brand promises.</p>
+        <h2>R&amp;D Consultation</h2>
+        <p>I love working out why a product behaves the way it does, and I bring that curiosity to yours. Tell me what you want to make. I will work through the recipe, the testing and the production with you until it is right.</p>
       </div>
       <div class="services">
         <div class="svc"><h3>Formulation</h3><p>New recipes from a brief, or reformulation for less sugar, less salt, a shorter ingredient list or a lower cost.</p></div>
-        <div class="svc"><h3>Shelf life and stability</h3><p>Water activity, pH, packaging and storage trials, so the date on the pack is one you can stand behind.</p></div>
-        <div class="svc"><h3>Sensory testing</h3><p>Triangle tests and consumer panels that show whether people can taste the change, and whether they like it.</p></div>
-        <div class="svc"><h3>Scale-up</h3><p>Taking a kitchen recipe to a pilot batch and on to a co-manufacturer's line while keeping what made it good.</p></div>
+        <div class="svc"><h3>Shelf life and lab tests</h3><p>Water activity, pH, packaging and storage trials, and getting the product through its lab tests.</p></div>
+        <div class="svc"><h3>Scale-up and production planning</h3><p>Taking a kitchen recipe to a pilot batch and on to full production, with a plan for equipment, batch sizes and timing.</p></div>
         <div class="svc"><h3>Costing</h3><p>Ingredient and process cost per unit, with options when the margin does not work.</p></div>
-        <div class="svc"><h3>Perceived value</h3><p>Name, format, portion and pack decisions that change how a product is judged before it is tasted.</p></div>
+        <div class="svc"><h3>Nutrition facts and labelling</h3><p>The nutrition information panel, ingredient list and allergen statement for your label.</p></div>
+        <div class="svc"><h3>Production training</h3><p>Training the people who will make it, so every batch comes out like the one you approved.</p></div>
       </div>
       <ol class="steps" aria-label="How a project runs">
         <li><b>Brief</b><span>What you are making, for whom, at what price.</span></li>
         <li><b>Bench</b><span>Prototype recipes and a written product spec.</span></li>
-        <li><b>Panel</b><span>Sensory tests on the leading versions.</span></li>
-        <li><b>Pilot</b><span>A scaled batch and shelf-life trial.</span></li>
-        <li><b>Handover</b><span>Spec, process and costing for your manufacturer.</span></li>
+        <li><b>Test</b><span>Shelf-life trials and lab tests on the chosen recipe.</span></li>
+        <li><b>Pilot</b><span>A scaled batch and a production plan.</span></li>
+        <li><b>Handover</b><span>Spec, costing, label and training for your team.</span></li>
       </ol>
       <div class="cases">
         <h3>Brands and products I have worked on</h3>
@@ -435,7 +440,7 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
         </div>
         <div>
           <span class="mono">Why him</span>
-          <p class="say">Everything I do is inspired by him. My clam noodles came from the same place: wanting to cook for people.</p>
+          <p class="say">He showed me that food matters most when it reaches someone who needs it. That is where my clam noodles began: I wanted to cook for people.</p>
         </div>
       </div>
     </section>
@@ -1139,7 +1144,12 @@ footer .wrap{padding-block:1.5rem 2.5rem;border-top:3px solid var(--accent);colo
         var v = new T.Vector2(((e.clientX-r.left)/r.width)*2-1, -((e.clientY-r.top)/r.height)*2+1);
         var ray = new T.Raycaster(); ray.setFromCamera(v, camera);
         var h = ray.intersectObjects(hit, false);
-        if (h.length){ select(h[0].object.userData.i); return; }
+        if (h.length){
+          select(h[0].object.userData.i);
+          var dest = $("picks");
+          if (dest && dest.scrollIntoView) dest.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"start"});
+          return;
+        }
       }
       var snap = Math.round((rot + vel*10)/STEP)*STEP;
       idx = mod(Math.round(-snap/STEP), N); show(idx); target = snap; locked = true;
